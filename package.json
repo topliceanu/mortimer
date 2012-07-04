@@ -1,7 +1,7 @@
 {
   "author": "alexandru topliceanu <alexandru.topliceanu@gmail.com> (http://github.com/topliceanu)",
   "name": "mortimer",
-  "description": "rest interface for mongoose defined models, built on top of express",
+  "description": "rest interface for mongoose models, built on top of express",
   "version": "0.0.1",
   "homepage": "http://github.com/topliceanu/mortimer",
   "repository": {
@@ -15,11 +15,12 @@
   "dependencies": {
 		"mocha": "~1.2.2",
 		"mongoose": "~2.7.1", 
-		"express": "~2.5.11"
+		"express": "~2.5.11",
+		"supertest": "~0.1.0"
 	},
   "devDependencies": {},
   "optionalDependencies": {},
   "engines": {
-    "node": "*"
+    "node": ">0.6.12"
   }
 }

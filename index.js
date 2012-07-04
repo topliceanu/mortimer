@@ -1,1 +1,1 @@
-module.exports = require('./lib/mortimer.js');
+module.exports = require('./lib/Mortimer.js');
