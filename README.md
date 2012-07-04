@@ -1,4 +1,9 @@
-mortimer
-========
+mortimer = MOngoose ResT
+========================
 
-rest interface for mongoose defined models, built on top of express
+
+Gist
+----
+
+**Mortimer** is rest interface for predefined mongoose models, powered by express.
+
