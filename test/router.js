@@ -27,7 +27,7 @@ var book3 = new fixtures.Book({
 	'author': author
 });
 
-var app = express();
+var app = express.createServer();
 
 var mortimer = new Mortimer({
 	base: '/api',
