@@ -41,20 +41,26 @@ mortimer.router(fixtures.Author).bind(app);
 
 describe( 'Router class', function () {
 
-	before( function (next) {
+	before( function (done) {
 		var that = this;
-		author.save( function (err) {
+		return fixtures.Author.collection.remove( function (err) {
 			if (err) throw err;
-			book1.save( function (err) {
+			return fixtures.Book.collection.remove( function (err) {
 				if (err) throw err;
-				book2.save( function (err) {
+				author.save( function (err) {
 					if (err) throw err;
-					book3.save( function (err) {
+					book1.save( function (err) {
 						if (err) throw err;
-						author.books = [book1, book2, book3];
-						author.save( function (err) {
+						book2.save( function (err) {
 							if (err) throw err;
-							return next();
+							book3.save( function (err) {
+								if (err) throw err;
+								author.books = [book1, book2, book3];
+								author.save( function (err) {
+									if (err) throw err;
+									return done();
+								});
+							});
 						});
 					});
 				});
@@ -63,35 +69,108 @@ describe( 'Router class', function () {
 	});
 
 
-	/*
-	it('POST /api/v1/books/'+book1.id+' should return the book', function (done) {
-		var expected = JSON.stringify(resBook.print(book1));
+	it('POST /api/v1/books/'+book1.id+' should be forbidden' , function (done) {
+		return request(app)
+			.post('/api/v1/books/'+book1.id)
+			.end(function (err, res) {
+				if (err) throw err;
+				assert.equal(res.statusCode, 403);
+				assert.equal(res.text, 'Forbidden');
+				return done();
+			});
+	});
+
+
+	it('GET /api/v1/books/'+book1.id+' should return a book', function (done) {
+		var expected = resBook.print(book1);
 		return request(app)
 			.get('/api/v1/books/'+book1.id)
-			.set('Accept', 'application/json')
-			.expect('Content-Type', 'application/json')
-			.expect(expected)
-			.expect(200, done);
+			.end( function (err, res) {
+				if (err) throw err;
+				if (res.text.toLowerCase() === 'not found') 
+					throw new Error('Book #'+book1.id+' not found');
+
+				var actual = JSON.parse(res.text);
+
+				assert.equal(res.statusCode, 200);
+				assert.ok(/application\/json/.test(res.headers['content-type']));
+				assert.equal(expected.id, actual.id);
+				assert.equal(expected.author, actual.author);
+				assert.equal(expected.title, actual.title);
+
+				return done();
+			});
+	});
+
+	/*
+	it('PUT /api/v1/books/'+book1.id+' should update the book', function (done) {
+		var expected = resBook.print(book1);
+		expected.title = 'War and Peace 2';
+
+		return request(app)
+			.put('/api/v1/books/'+book1.id)
+			.send({'title': 'War and Peace 2'})
+			.end( function (err, res) {
+				if (err) throw err;	
+					
+				var actual = JSON.parse(res.text);
+
+				assert.equal(res.statusCode, 200);
+				assert.ok(/application\/json/.test(res.headers['content-type']));
+				assert.equal(expected.id, actual.id);
+				assert.equal(expected.author, actual.author);
+				assert.equal(expected.title, actual.title);
+
+				return done();
+			});
 	});
 	*/
 
-
-	it('POST /api/v1/books/'+book1.id+' should be forbidden', function (done) {
+	it('DEL /api/v1/books/'+book1.id+' should delete the book', function (done) {
 		return request(app)
-			.post('/api/v1/books/'+book1.id)
-			.expect('Forbidden')
-			.end(done);
+			.del('/api/v1/books/'+book1.id)
+			.end( function (err, res) {
+				if (err) throw err;
+
+				assert.equal(res.statusCode, 200);
+				assert.equal(res.text, 'OK');
+				return done();
+			});
 	});
 
+	/*
+	it('POST /api/v1/books should create a new book', function (done) {
+		return request(app)
+			.post('/api/v1/books')
+			.send({
+				'title': 'War and Peace 3',
+				'author': author
+			}).end( function (err, res) {
+				if (err) throw err;
 
-	//TODO  test more routes
+				assert.equal(res.statusCode, 200);
+				return done();
+			});
+	});
+	*/
 
+	it('GET /api/v1/books should retrieve all available books', function (done) {
+		return request(app)
+			.get('/api/v1/books')
+			.end( function (err, res) {
+				if (err) throw err;
+				var books = JSON.parse(res.text);
 
-	after( function (next) {
+				assert.equal(res.statusCode, 200);
+				assert.equal(books.length, 2);
+			});
+	});
+
+	after( function (done) {
 		var that = this;
 		return fixtures.Author.collection.remove( function () {
 			return fixtures.Book.collection.remove( function () {
-				return next();
+				return done();
 			});
 		});
 	});

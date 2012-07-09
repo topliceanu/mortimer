@@ -79,7 +79,7 @@ describe('Resource Class', function () {
 		return this.bookRes.execute(params, function (err, data) {
 			if (err) throw err;
 			assert.deepEqual({
-				_id: book.id,
+				id: book.id,
 				title: book.title,
 				author: book.author.toString()
 			}, data, 'should have the correct properties');
@@ -97,7 +97,7 @@ describe('Resource Class', function () {
 
 		return this.bookRes.execute(params, function (err, data) {
 			if (err) throw err;
-			assert.equal(data._id, book.id, 'filterd out props should be missing');
+			assert.equal(data.id, book.id, 'filterd out props should be missing');
 			assert.equal(data.title, book.title, 'filterd out props should be missing');
 			assert.equal(data.author, undefined, 'filterd out props should be missing');
 			return next();
@@ -132,7 +132,7 @@ describe('Resource Class', function () {
 
 		return this.bookRes.execute(params, function (err, data) {
 			if (err) throw err;
-			assert.equal(data._id, book.id, 'should have the same id');	
+			assert.equal(data.id, book.id, 'should have the same id');	
 			assert.equal(data.author, book.author.toString(), 'should have the same author');
 			assert.equal(data.title, 'Novels', 'only the title changes');
 			return next();
@@ -148,7 +148,7 @@ describe('Resource Class', function () {
 
 		return this.bookRes.execute(params, function (err, data) {
 			if (err) throw err;
-			assert.equal(data, 1);
+			assert.equal(data, undefined);
 			fixtures.Book.findById(params.id, function (err, book) {
 				if (err) throw err;
 				if (book) throw new Error('this book should have been deleted');
@@ -205,7 +205,7 @@ describe('Resource Class', function () {
 
 		return this.bookRes.execute(params, function (err, data) {
 			if (err) throw err;
-			assert.equal(data, 1)
+			assert.equal(data, undefined)
 			return next();
 		});
 	});
