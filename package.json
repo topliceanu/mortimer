@@ -16,7 +16,7 @@
 		"mocha": "~1.2.2",
 		"mongoose": "~2.7.1", 
 		"express": "~2.5.11",
-		"supertest": "~0.1.0"
+		"request": "*"
 	},
   "devDependencies": {},
   "optionalDependencies": {},
