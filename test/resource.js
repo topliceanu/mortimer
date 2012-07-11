@@ -89,11 +89,11 @@ describe('Resource Class', function () {
 
 
 	it('should retrieve only the book title', function (next) {
-		var book = this.book1
+		var book = this.book1;
 		var params = {};
 		params.action = 'GET';
 		params.id = this.book1.id;
-		params.fields = ['title'] 
+		params.fields = ['title'];
 
 		return this.bookRes.execute(params, function (err, data) {
 			if (err) throw err;
@@ -128,7 +128,7 @@ describe('Resource Class', function () {
 		params.id = book.id;
 		params.action = "PUT";
 		params.body = {};
-		params.body.title = 'Novels'
+		params.body.title = 'Novels';
 
 		return this.bookRes.execute(params, function (err, data) {
 			if (err) throw err;
@@ -141,7 +141,7 @@ describe('Resource Class', function () {
 
 
 	it('should delete an existing record', function (next) {
-		var book = this.book1	
+		var book = this.book1;
 		var params = {};
 		params.id = book.id;
 		params.action = "DELETE";
@@ -165,7 +165,7 @@ describe('Resource Class', function () {
 		params.pagination = {};
 		params.pagination.limit = 1;
 		params.pagination.offset = 0;
-		params.fields = ['title']
+		params.fields = ['title'];
 		params.filters = {};
 		params.filters.author = this.author.id;
 
@@ -205,7 +205,7 @@ describe('Resource Class', function () {
 
 		return this.bookRes.execute(params, function (err, data) {
 			if (err) throw err;
-			assert.equal(data, undefined)
+			assert.equal(data, undefined);
 			return next();
 		});
 	});
