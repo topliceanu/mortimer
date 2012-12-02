@@ -8,5 +8,17 @@ var AuthorSchema = new mongoose.Schema({
 	'books': [{'type': ObjectId, 'ref': 'Book'}]
 });
 
+AuthorSchema.methods.toJSON = function () {
+    var out = {
+        name: this.name,
+        books: []
+    };
+    this.books.forEach( function (book) {
+        out.books.push(book.toString());
+    });
+    return out;
+};
+
+
 Author = mongoose.model('Author', AuthorSchema);
 module.exports = Author;
