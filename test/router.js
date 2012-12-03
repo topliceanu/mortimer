@@ -16,7 +16,7 @@ mortimer.router(fixtures.Author).bind(app);
 
 describe( 'Router.js', function () {
 
-	beforeEach(fixtures.before);
+	before(fixtures.before);
 
 
 	it('GET /api/v1/books/'+fixtures.book1.id, function (done) {
@@ -40,31 +40,32 @@ describe( 'Router.js', function () {
             author: fixtures.author.id.toString()
         };
         request(app)
-            .post('/api/v1/books'+fixtures.book1.id)
+            .post('/api/v1/books/'+fixtures.book1.id)
             .send(fakeData)
-            .expect(403)
+            .expect(403, 'Forbidden')
             .end(done);
     });
 
-
 	it('PUT /api/v1/books/'+fixtures.book1.id, function (done) {
-        modify = {
+        var modify = {
             title: 'War and Peace, Second Edition'
         };
         request(app)
             .put('/api/v1/books/'+fixtures.book1.id)
             .send(modify)
             .set('Accept', 'application/json')
-            .expect(200)
             .end( function (err, res) {
                 if (err) return done(err);
-                assert.equal(res.body.id, fixture.book1.id, 'Preserves the id.');
+                assert.equal(res.statusCode, 200);
+                assert.equal(res.body.id, fixtures.book1.id, 'Preserves the id.');
                 assert.equal(res.body.title, modify.title, 'Changes the title.');
-                assert.equal(res.body.author, global.book4.author, 'Same author id');
+                assert.equal(res.body.author, fixtures.book1.author, 'Same author id');
+                return done();
             });
     });
 
 
+/*
 	it('DELETE /api/v1/books/'+fixtures.book1.id, function (done) {
         request(app)
             .del('/api/v1/books/'+fixtures.book1.id)
@@ -78,6 +79,7 @@ describe( 'Router.js', function () {
 	it('GET /api/v1/books', function (done) {
         request(app)
             .get('/api/v1/books')
+            .set('Accept', 'application/json')
             .expect('Content-Type', /json/)
             .end( function (err, res) {
                 if (err) return done(err);
@@ -104,6 +106,7 @@ describe( 'Router.js', function () {
             .send(book4)
             .set('Accept', 'application/json')
             .end( function (err, res) {
+                debugger;
                 if (err) return done(err);
                 assert.equal(res.statusCode, 201, 'Resource Created');
                 assert.ok(res.body.id, 'Id allocated'); 
@@ -142,8 +145,7 @@ describe( 'Router.js', function () {
             .end(done);
         //TODO check the database
 	});
+*/
 
-
-
-	afterEach(fixtures.after);
+	after(fixtures.after);
 });

@@ -30,22 +30,19 @@ exports.author = author;
 
 exports.before = function (done) {
     exports.Author.collection.remove( function (err) {
-        if (err) throw err;
+        if (err) return done(err);
         exports.Book.collection.remove( function (err) {
-            if (err) throw err;
+            if (err) return done(err);
             author.save( function (err) {
-                if (err) throw err;
+                if (err) return done(err);
                 book1.save( function (err) {
-                    if (err) throw err;
+                    if (err) return done(err);
                     book2.save( function (err) {
-                        if (err) throw err;
+                        if (err) return done(err);
                         book3.save( function (err) {
-                            if (err) throw err;
+                            if (err) return done(err);
                             author.books = [book1, book2, book3];
-                            author.save( function (err) {
-                                if (err) throw err;
-                                return done();
-                            });
+                            author.save(done);
                         });
                     });
                 });
@@ -56,10 +53,7 @@ exports.before = function (done) {
 
 exports.after = function (done) {
     return exports.Author.collection.remove( function (err) {
-        if (err) throw err;
-        return exports.Book.collection.remove( function (err) {
-            if (err) throw err;
-            return done();
-        });
+        if (err) return done(err);
+        return exports.Book.collection.remove(done);
     });
 };

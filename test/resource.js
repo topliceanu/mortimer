@@ -39,9 +39,10 @@ describe('Resource Class', function () {
 
 		return this.bookRes.execute(params, function (err, data) {
 			if (err) return next(err);
-			assert.equal(data.id, book.id, 'Correct id');
-		    assert.equal(data.title, book.title, 'Correct title');
-		    assert.equal(data.author, book.author.toString(), 'Correct author');
+            assert.equal(data.code, 200, 'Ok');
+			assert.equal(data.message.id, book.id, 'Correct id');
+		    assert.equal(data.message.title, book.title, 'Correct title');
+		    assert.equal(data.message.author, book.author.toString(), 'Correct author');
 			return next();
 		});
 	});
@@ -55,10 +56,11 @@ describe('Resource Class', function () {
 		params.fields = ['title'];
 
 		return this.bookRes.execute(params, function (err, data) {
-			if (err) throw err;
-			assert.equal(data.id, book.id, 'filterd out props should be missing');
-			assert.equal(data.title, book.title, 'filterd out props should be missing');
-			assert.equal(data.author, undefined, 'filterd out props should be missing');
+			if (err) return next(err);
+            assert.equal(data.code, 200, 'Ok');
+			assert.equal(data.message.id, book.id, 'filterd out props should be missing');
+			assert.equal(data.message.title, book.title, 'filterd out props should be missing');
+			assert.equal(data.message.author, undefined, 'filterd out props should be missing');
 			return next();
 		});
 	});
@@ -74,8 +76,9 @@ describe('Resource Class', function () {
 
 		return this.bookRes.execute(params, function (err, data) {
 			if (err) return next(err);
-			assert.equal(data.title, 'Novels', 'should have the correct title');
-			assert.equal(data.author, fixtures.author.id, 'should have the correct author');
+            assert.equal(data.code, 201, 'Created');
+			assert.equal(data.message.title, 'Novels', 'should have the correct title');
+			assert.equal(data.message.author, fixtures.author.id, 'should have the correct author');
 			return next();
 		});
 	});
@@ -90,10 +93,11 @@ describe('Resource Class', function () {
 		params.body.title = 'Novels';
 
 		return this.bookRes.execute(params, function (err, data) {
-			if (err) throw err;
-			assert.equal(data.id, book.id, 'should have the same id');
-			assert.equal(data.author, book.author.toString(), 'should have the same author');
-			assert.equal(data.title, 'Novels', 'only the title changes');
+			if (err) return next(err);
+            assert.equal(data.code, 200, 'Ok');
+			assert.equal(data.message.id, book.id, 'should have the same id');
+			assert.equal(data.message.author, book.author.toString(), 'should have the same author');
+			assert.equal(data.message.title, 'Novels', 'only the title changes');
 			return next();
 		});
 	});
@@ -106,8 +110,9 @@ describe('Resource Class', function () {
 		params.action = "DELETE";
 
 		return this.bookRes.execute(params, function (err, data) {
-			if (err) throw err;
-			assert.equal(data, undefined);
+			if (err) return next(err);
+            assert.equal(data.code, 204, 'Empty');
+			assert.equal(data.message, undefined);
 			fixtures.Book.findById(params.id, function (err, book) {
 				if (err) throw err;
 				if (book) throw new Error('this book should have been deleted');
@@ -117,7 +122,7 @@ describe('Resource Class', function () {
 	});
 
 
-	it('should list list all books', function (next) {
+	it('should list list all book title, no authors', function (next) {
 		var params = {};
 		params.action = "GET";
 		params.pagination = {};
@@ -128,10 +133,11 @@ describe('Resource Class', function () {
 		params.filters.author = fixtures.author.id;
 
 		return this.bookRes.execute(params, function (err, books) {
-			if (err) throw err;
-			assert.equal(books.length, 1, 'the pagination should work');
-			assert.equal(books[0].title, fixtures.book2.title, 'select fields should work');
-			assert.equal(books[0].author, undefined, 'select filters should work');
+			if (err) return next(err);
+            assert.equal(books.code, 200, 'Ok');
+			assert.equal(books.message.length, 1, 'the pagination should work');
+			assert.equal(books.message[0].title, fixtures.book2.title, 'select fields should work');
+			assert.equal(books.message[0].author, undefined, 'select filters should work');
 			return next();
 		});
 	});
@@ -146,8 +152,9 @@ describe('Resource Class', function () {
 		params.body.title = "Test Title";
 
 		return this.bookRes.execute(params, function (err, books) {
-			if (err) throw err;
-			books.forEach( function (book) {
+			if (err) return next(err);
+            assert.equal(books.code, 200, 'Ok');
+			books.message.forEach( function (book) {
 				assert.equal(book.title, 'Test Title', 'should all have changed titles');
 			});
 			return next();
@@ -162,8 +169,9 @@ describe('Resource Class', function () {
 		params.filters.author = fixtures.author.id;
 
 		return this.bookRes.execute(params, function (err, data) {
-			if (err) throw err;
-			assert.equal(data, undefined);
+			if (err) return next(err);
+            assert.equal(data.code, 204, 'Empty');
+			assert.equal(data.message, undefined);
 			return next();
 		});
 	});
