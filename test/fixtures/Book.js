@@ -8,5 +8,13 @@ var BookSchema = new mongoose.Schema({
 	'author': {'type': ObjectId, 'ref': 'Author'}
 });
 
+BookSchema.methods.toJSON = function () {
+    var out = {
+        title: this.title
+    };
+    if (this.author) out.author = this.author.toString();
+    return out
+};
+
 Book = mongoose.model('Book', BookSchema);
 module.exports = Book;
