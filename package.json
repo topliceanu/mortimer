@@ -14,7 +14,8 @@
     },
     "dependencies": {
         "mongoose": "3.4.0",
-        "express": "3.x"
+        "express": "3.x",
+        "underscore": "~1.4.3"
     },
     "devDependencies": {
         "mocha": "~1.2.2",

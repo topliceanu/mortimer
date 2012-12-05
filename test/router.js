@@ -36,6 +36,7 @@ describe( 'Router.js', function () {
             });
     });
 
+
 	it('POST /api/v1/books/:bookId should not work', function (done) {
         var that = this;
         var fakeData = {
@@ -170,6 +171,30 @@ describe( 'Router.js', function () {
                 });
             });
 	});
+
+
+    it('GET /api/v1/authors/:authorId - retrieve books as array of ids', function (done) {
+        var that = this;
+        request(app)
+            .get('/api/v1/authors/'+this.author.id)
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .end( function (err, res) {
+                if (err) return done(err);
+                assert.equal(res.statusCode, 200);
+                assert.equal(res.body.id, that.author.id);
+                assert.equal(res.body.name, that.author.name);
+                assert.equal(res.body.books.length, 3);
+                for (var i = 0, n = res.body.books.length; i<n; i ++) {
+                    debugger;
+                    var book = that['book'+(i+1)];
+                    var bookIsRetrieved = res.body.books.indexOf(book.id) >= 0;
+                    assert.equal(true, bookIsRetrieved);
+                }
+                return done();
+            });
+    });
+
 
 	afterEach(fixtures.after);
 });
