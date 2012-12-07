@@ -32,7 +32,7 @@ var mortimer = new Mortimer({
 // Let mortimer generate standard endpoints for your model.
 mortimer.router(Book).bind(app);
 mortimer.router(Author, {version: 'v2'}).bind(app);
-// The above will generate GET /api/v2/authors, POST /api/v2/authors, etc.
+// The above will generate GET /service/api/v2/authors, POST /service/api/v2/authors, etc.
 
 
 // OR Use mortimer's middleware functions just for data fetching.
