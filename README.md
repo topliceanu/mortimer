@@ -13,7 +13,7 @@ Gist
 Examples
 ========
 
-1. Example showing a _one-liner_ mortimer setup that gives you all standard CRUD endpoints.
+Example showing a _one-liner_ mortimer setup that gives you all standard CRUD endpoints. This is perfect for bootstraping projects.
 
 ````javascript
 var express = require('express');
@@ -51,7 +51,8 @@ app.del('/api/v1/books/:bookId', deleteBookById);
 app.listen(3000);
 ````
 
-2. Example showing a more complex api setup where Mortimer's middleware is be used in conjunction with other specialized middleware.
+
+This example shows off a more complex api setup where Mortimer's middleware is be used in conjunction with other specialized middleware.
 
 ````javascript
 var express = require('express');
@@ -82,7 +83,9 @@ API
 ===
 
 Mortimer will generate endpoints to create, read, delete and update for both single resources and collections.
+
 Mortimer is configurable, lightweight and supports pagination, fitlering and field sets for endpoints that make sense to have them.
+
 For more flexibility it also exposes middleware for all rest verbs.
 
 
@@ -105,19 +108,19 @@ Mortimer
 .middleware
 -----------
 
-Returns a middleware function that runs the specified query in express **AND** returns the response to the client.
+    Returns a middleware function that runs the specified query in express **AND** returns the response to the client.
 
-@param {Object} model - instance of the mongoose.Model class you want to run the query on.
-@param {String} action - the REST action to perform against the `model`
-                action = 'read' - returns a plain object representation of the specified `model`
-                                - usefull for GET requests. You need to pass an `:modelNameId` url param.
-                action = 'create' - creates a new resource of type `model` with a specified `:modelNameId`
-                                - usefull for POST requests, expects a request body to be sent as JSON.
-                action = 'update' - updates a resource of type `model` with a specified `:modelNameId`
-                action = 'delete' - removes a resource of type `model` specified by a `:modelNameId`
-                action = 'readAll' - return all resources of type `model`.
-                action = 'updateAll' - update all resources of type `model`. Expects a content body to be received as JSON object
-                action = 'deleteAll' - removes all resources of type `model`
+    @param {Object} model - instance of the mongoose.Model class you want to run the query on.
+    @param {String} action - the REST action to perform against the `model`
+                    action = 'read' - returns a plain object representation of the specified `model`
+                                    - usefull for GET requests. You need to pass an `:modelNameId` url param.
+                    action = 'create' - creates a new resource of type `model` with a specified `:modelNameId`
+                                    - usefull for POST requests, expects a request body to be sent as JSON.
+                    action = 'update' - updates a resource of type `model` with a specified `:modelNameId`
+                    action = 'delete' - removes a resource of type `model` specified by a `:modelNameId`
+                    action = 'readAll' - return all resources of type `model`.
+                    action = 'updateAll' - update all resources of type `model`. Expects a content body to be received as JSON object
+                    action = 'deleteAll' - removes all resources of type `model`
 
 Collection middleware (i.e. `readAll`, `updateAll`, `deleteAll`) also support filtering, specific fields and pagination. Just add to your request urls:
 
@@ -130,7 +133,7 @@ Collection middleware (i.e. `readAll`, `updateAll`, `deleteAll`) also support fi
 
 These are convenience methods for the `.middleware` function above
 
-@param {Object} model - instance of the mongoose.Model class you want to run the query on.
+    @param {Object} model - instance of the mongoose.Model class you want to run the query on.
 
 
 Development and Contribution
@@ -143,7 +146,7 @@ You can change the host and port for your mongo by _manually_ editing `/test/fix
 git clone git@github.com:topliceanu/mortimer.git
 cd mortimer
 npm install
-
+mocha
 ````
 
 
