@@ -102,5 +102,27 @@ describe('Resource Class', function () {
     });
 
 
+    it('make sure the api does not return undefined value in arrays or object', function (done) {
+        // Remove the name to see if the api retrieves it.
+        var that = this;
+        that.author.type = undefined;
+        that.author.save( function (err) {
+            if (err) return done(err);
+            request(app)
+                .get('/api/v1/authors/'+that.author.id)
+                .set('Accept', 'application/json')
+                .expect('Content-Type', /json/)
+                .end( function (err, res) {
+                    if (err) return done(err);
+                    assert.equal(res.statusCode, 200);
+                    assert.equal(res.body.id, that.author.id.toString());
+                    assert.equal(res.body.name, that.author.name);
+                    assert.ok(!res.body.hasOwnProperty('type'))
+                    return done();
+                });
+        });
+    });
+
+
 	afterEach(fixtures.after);
 });
