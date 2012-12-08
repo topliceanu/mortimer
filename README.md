@@ -91,14 +91,16 @@ For more flexibility it also exposes middleware for all rest verbs.
 
 Mortimer
 --------
-    Constructor function that initializes the mortimer setup.
+
+Constructor function that initializes the mortimer setup.
 
     @param {String} [options.base] - defaults `/api`, mind the trainling slash.
     @param {String} [options.version] - defaults to `v1`.
 
 .router
 -------
-    Sets up a complete REST api both for single resources and collections.
+
+Sets up a complete REST api both for single resources and collections.
 
     @param {Object} model - an instance of the mongoose.Model class you want to create endpoints for.
     @param {Object} options - the same options as the `Mortimer` constructor, these override options passed to constructor.
@@ -108,7 +110,7 @@ Mortimer
 .middleware
 -----------
 
-    Returns a middleware function that runs the specified query in express **AND** returns the response to the client.
+Returns a middleware function that runs the specified query in express **AND** returns the response to the client.
 
     @param {Object} model - instance of the mongoose.Model class you want to run the query on.
     @param {String} action - the REST action to perform against the `model`
