@@ -2,7 +2,7 @@
     "author": "alexandru topliceanu <alexandru.topliceanu@gmail.com> (http://github.com/topliceanu)",
     "name": "mortimer",
     "description": "rest interface for mongoose models, built on top of express",
-    "version": "0.1.8",
+    "version": "0.1.9",
     "homepage": "http://github.com/topliceanu/mortimer",
     "repository": {
         "type": "git",
