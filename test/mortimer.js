@@ -6,11 +6,27 @@ var Mortimer = require('./../');
 var fixtures = require('./fixtures');
 
 var app = express();
-var mortimer = new Mortimer({base: '/api', version: 'v1'});
-
 app.use(express.bodyParser());
+
+
+// Prepare fake header.
+var header = {
+    key: 'Fake-Header',
+    value: 'test-value'
+};
+var applyHeader = function (req, res, next) {
+    res.set(header.key, header.value);
+    return next();
+};
+var mortimer = new Mortimer({
+    base: '/api',
+    version: 'v1',
+    pre: applyHeader
+});
+
 app.get('/api/v1/books/:bookId', mortimer.middleware(fixtures.Book, 'read'));
 app.get('/api/v1/authors/:authorId', mortimer.read(fixtures.Author));
+
 
 
 describe('Resource Class', function () {
@@ -64,6 +80,23 @@ describe('Resource Class', function () {
             .end( function (err, res) {
                 if (err) return done(err);
                 assert.equal(res.statusCode, 404);
+                return done();
+            });
+    });
+
+
+    it('test if the `pre` middleware arrays work', function (done) {
+        var that = this;
+        request(app)
+            .get('/api/v1/authors/'+that.author.id)
+            .set('Accept', 'application/json')
+            .expect('Content-Type', /json/)
+            .expect(header.key, header.value)
+            .end( function (err, res) {
+                if (err) return done(err);
+                assert.equal(res.statusCode, 200);
+                assert.equal(res.body.id, that.author.id.toString());
+                assert.equal(res.body.name, that.author.name);
                 return done();
             });
     });
