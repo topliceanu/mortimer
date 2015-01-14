@@ -243,7 +243,7 @@ class Rest
                 meta: _.clone req.params
 
             if options.empty isnt true
-                output.data = req[@ns]result
+                output.data = req[@ns].result
 
             res.send options.statusCode, output
 

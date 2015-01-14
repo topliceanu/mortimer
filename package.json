@@ -32,6 +32,7 @@
         "mongoose": "3.8.21",
         "express": "4.10.7",
         "coffee-script": "1.8.0",
+        "coffeelint": "1.8.1",
         "mocha": "2.1.0",
         "chai": "1.10.0",
         "supertest": "0.15.0",

@@ -6,13 +6,30 @@ Gist
 
 **Mortimer** is an extendible REST interface for mongoose models, designed for the entire project lifecycle: from fast prototyping to custom functionality.
 
-Report
+Raport
 ======
 
 
 Example
 =======
 
+Contributing
+============
+
+1. Before starting to work on an ideea, please open an issue. You will get an answer ASAP.
+2. Clone the repo `$ git clone git@github.com:topliceanu/mortimer.git`
+3. If you use [vagrant](https://www.vagrantup.com/) then simply clone the repo into a folder then issue `$ vagrant up`
+4. If you don't use it, then:
+ - install mongodb and have it running on `localhost:27017`.
+ - install node.js and all node packages required in development using `$ npm install`
+ - See `./vagrant_boostrap.sh` for instructions on how to setup all dependencies on a fresh ubuntu machine.
+5. Run the tests to make sure you have a correct setup: `$ mocha`
+6. Submit a pull request with your code
+ - make sure you add tests to your idea
+ - make sure existing tests still pass
+ - make sure test coverage does not decrease
+ - run coffeelint on the source code
+7. Have my kindest thanks for making this project better.
 
 Changelog
 =========
@@ -29,7 +46,6 @@ Version 1.0.0 - Jan 13, 2015
 
 Version 0.1.9 - Dec 8, 2012
 -------------
-
 
 Licence
 =======

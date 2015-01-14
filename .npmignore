@@ -1,2 +1,8 @@
 src/
 test/
+example/
+coffeelint.json
+Vagrantfile
+vagrant_bootstrap.sh
+README.md
+LICENSE
