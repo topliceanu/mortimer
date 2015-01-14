@@ -8,8 +8,5 @@ BookSchema = new mongoose.Schema
     author: {type: String, required: true}
     details: {type: Mixed}
 
-Book = mongoose.model 'Book', BookSchema
-
-
 # Public API.
-module.exports = Book
+module.exports = BookSchema

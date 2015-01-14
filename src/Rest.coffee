@@ -24,7 +24,6 @@ class Rest
         # Default namespace for data attached by mortimer to the request object.
         @ns = 'mrt'
 
-
     # GENERIC ENDPOINTS
 
     createDoc: (options = {}) ->
@@ -118,6 +117,12 @@ class Rest
             @publish statusCode: 200
         ]
 
+    updateDocs: (options = {}) ->
+        ###
+            Updates a set of documents in bulk.
+        ###
+        [
+        ]
 
     patchDocs: (options = {}) ->
         ###

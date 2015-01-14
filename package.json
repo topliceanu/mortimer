@@ -1,46 +1,45 @@
 {
-    "name": "mortimer",
-    "version": "2.0.1",
-    "description": "rest interface for mongoose models, built on top of express",
-    "homepage": "http://github.com/topliceanu/mortimer",
-    "license": "MIT",
-    "keywords": [
-        "rest",
-        "mongoose",
-        "mongodb",
-        "express"
-    ],
-    "author": "alexandru topliceanu <alexandru.topliceanu@gmail.com> (http://alexandrutopliceanu.ro)",
-    "repository": {
-        "type": "git",
-        "url": "git://github.com/topliceanu/mortimer.git"
-    },
-    "bugs": {
-        "url": "https://github.com/topliceanu/mortimer/issues"
-    },
-    "main": "dist/index.js",
-    "scripts": {
-        "pretest": "coffee --bare --output ./lib --compile ./src",
-        "test": "mocha",
-        "prepublish": "coffee --bare --output ./lib --compile ./src",
-        "postpublish": "rm -fr ./lib/*"
-    },
-    "dependencies": {
-        "underscore": "1.7.0"
-    },
-    "devDependencies": {
-        "mongoose": "3.8.21",
-        "express": "4.10.7",
-        "coffee-script": "1.8.0",
-        "coffeelint": "1.8.1",
-        "mocha": "2.1.0",
-        "chai": "1.10.0",
-        "supertest": "0.15.0",
-        "q": "1.1.2"
-    },
-    "optionalDependencies": {
-    },
-    "engines": {
-        "node": ">0.10.0"
-    }
+  "name": "mortimer",
+  "version": "2.0.1",
+  "description": "rest interface for mongoose models, built on top of express",
+  "homepage": "http://github.com/topliceanu/mortimer",
+  "license": "MIT",
+  "keywords": [
+    "rest",
+    "mongoose",
+    "mongodb",
+    "express"
+  ],
+  "author": "alexandru topliceanu <alexandru.topliceanu@gmail.com> (http://alexandrutopliceanu.ro)",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/topliceanu/mortimer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/topliceanu/mortimer/issues"
+  },
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha",
+    "prepublish": "./node_modules/.bin/coffee --bare --output ./lib --compile ./src",
+    "postpublish": "rm -fr ./lib/*"
+  },
+  "dependencies": {
+    "underscore": "1.7.0"
+  },
+  "devDependencies": {
+    "body-parser": "1.10.1",
+    "chai": "1.10.0",
+    "coffee-script": "1.8.0",
+    "coffeelint": "1.8.1",
+    "express": "4.10.7",
+    "mocha": "2.1.0",
+    "mongoose": "3.8.21",
+    "q": "1.1.2",
+    "supertest": "0.15.0"
+  },
+  "optionalDependencies": {},
+  "engines": {
+    "node": ">0.10.0"
+  }
 }

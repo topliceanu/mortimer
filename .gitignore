@@ -12,5 +12,5 @@ logs
 results
 
 node_modules
-dist/
+lib/
 .vagrant

@@ -1,56 +1,58 @@
 http = require 'http'
 
 _ = require 'underscore'
-assert = (require 'chai').assert
+bodyParser = require 'body-parser'
+chai = require 'chai'
 express = require 'express'
 mongoose = require 'mongoose'
 request = require 'supertest'
+Q = require 'q'
+qs = require 'qs'
 
-Book = require '../Factory'
+fixture = require './fixture'
 Rest = require '../src/Rest'
 
+
+{assert} = chai
+{Book} = fixture
 
 describe 'Rest', ->
 
     before ->
-        @rest = new Rest @Book
+        @rest = new Rest Book
 
         @app = express()
-        @app.use express.query()
-        @app.use express.bodyParser()
+        @app.set 'query parser', 'simple'
+        @app.use bodyParser.json()
 
-        @app.get '/books/stream', @rest.streamDocs()
-        @app.post '/books', @rest.createDoc()
         @app.get '/books/:bookId', @rest.readDoc()
-        @app.head '/books/:bookId', @rest.checkDoc()
         @app.put '/books/:bookId', @rest.updateDoc()
-        @app.put '/books/:bookId', @rest.patchDoc()
-        @app.del '/books/:bookId', @rest.removeDoc()
+        @app.patch '/books/:bookId', @rest.patchDoc()
+        @app.delete '/books/:bookId', @rest.removeDoc()
         @app.get '/books', @rest.readDocs()
-        @app.get '/books', @rest.updateDocs()
-        @app.get '/books', @rest.patchDocs()
-        @app.get '/books', @rest.removeDocs()
+        @app.post '/books', @rest.createDoc()
+        @app.get '/books/stream', @rest.streamDocs()
+        @app.put '/books', @rest.updateDocs()
+        @app.patch '/books', @rest.patchDocs()
+        @app.delete '/books', @rest.removeDocs()
 
         @server = http.createServer @app
 
     beforeEach (done) ->
-        @book1 = new @Book
-            title: 'book1'
-            author: 'author1'
-        @book1.save (error) =>
-            if error? then return done error
-
-            @book2 = new @Book
+        Q().then =>
+            @book1 = new Book
+                title: 'book1'
+                author: 'author1'
+            Q.ninvoke @book1, 'save'
+        .then =>
+            @book2 = new Book
                 title: 'book2'
                 author: 'author1'
-            @book2.save (error) =>
-                if error? then return done error
-                done()
+            Q.ninvoke @book2, 'save'
+        .then (-> done()), done
 
     afterEach (done) ->
-        @Book.collection.remove (error) ->
-            if error? then done error
-            done()
+        (Q.ninvoke Book.collection, 'remove').then (-> done()), done
 
     describe 'Query Modifiers', ->
 
@@ -333,18 +335,6 @@ describe 'Rest', ->
                     assert.equal res.body.author, @book1.author, 'same author'
                     done()
 
-        it '.checkDoc() should return only 200 with empty body '+
-           'when the book record exists', (done) ->
-            request(@server)
-                .head("/apps/#{@shop.ID}/books/#{@book1.ID}")
-                .set('Authorization', "Basic #{@basicAuth}")
-                .set('Content-Type', 'application/json')
-                .set('Accept', 'application/json')
-                .end (errors, res) =>
-                    if errors? then return done errors
-                    assert.equal res.statusCode, 200, 'Ok'
-                    assert.deepEqual res.body, {}, 'empty body'
-                    done()
 
         it '.updateDoc() should update an existing book record', (done) ->
             payload =
