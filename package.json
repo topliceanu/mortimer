@@ -1,28 +1,45 @@
 {
-    "author": "alexandru topliceanu <alexandru.topliceanu@gmail.com> (http://github.com/topliceanu)",
     "name": "mortimer",
+    "version": "2.0.1",
     "description": "rest interface for mongoose models, built on top of express",
-    "version": "0.1.9",
     "homepage": "http://github.com/topliceanu/mortimer",
+    "license": "MIT",
+    "keywords": [
+        "rest",
+        "mongoose",
+        "mongodb",
+        "express"
+    ],
+    "author": "alexandru topliceanu <alexandru.topliceanu@gmail.com> (http://alexandrutopliceanu.ro)",
     "repository": {
         "type": "git",
         "url": "git://github.com/topliceanu/mortimer.git"
     },
-    "main": "index.js",
+    "bugs": {
+        "url": "https://github.com/topliceanu/mortimer/issues"
+    },
+    "main": "dist/index.js",
     "scripts": {
-        "test": "mocha"
+        "pretest": "coffee --bare --output ./lib --compile ./src",
+        "test": "mocha",
+        "prepublish": "coffee --bare --output ./lib --compile ./src",
+        "postpublish": "rm -fr ./lib/*"
     },
     "dependencies": {
-        "mongoose": "3.4.0",
-        "express": "3.x",
-        "underscore": "~1.4.3"
+        "underscore": "1.7.0"
     },
     "devDependencies": {
-        "mocha": "~1.2.2",
-        "supertest": "~0.5.0"
+        "mongoose": "3.8.21",
+        "express": "4.10.7",
+        "coffee-script": "1.8.0",
+        "mocha": "2.1.0",
+        "chai": "1.10.0",
+        "supertest": "0.15.0",
+        "q": "1.1.2"
     },
-    "optionalDependencies": {},
+    "optionalDependencies": {
+    },
     "engines": {
-        "node": ">0.6.12"
+        "node": ">0.10.0"
     }
 }
