@@ -7,7 +7,6 @@ express = require 'express'
 mongoose = require 'mongoose'
 request = require 'supertest'
 Q = require 'q'
-qs = require 'qs'
 
 fixture = require './fixture'
 Resource = require '../src/Resource'

@@ -1,8 +1,5 @@
 _ = require 'underscore'
-mongoose = require 'mongoose'
 
-
-{ObjectId} = mongoose.Schema
 
 # Base class for all Resources.
 #
