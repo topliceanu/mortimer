@@ -1,6 +1,7 @@
 src/
 test/
 example/
+doc/
 coffeelint.json
 Vagrantfile
 vagrant_bootstrap.sh

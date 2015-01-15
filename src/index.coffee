@@ -1,1 +1,1 @@
-exports.Rest = require './Rest'
+exports.Resource = require './Resource'

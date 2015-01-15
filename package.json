@@ -22,7 +22,9 @@
   "scripts": {
     "test": "./node_modules/.bin/mocha",
     "prepublish": "./node_modules/.bin/coffee --bare --output ./lib --compile ./src",
-    "postpublish": "rm -fr ./lib/*"
+    "postpublish": "rm -fr ./lib/*",
+    "lint": "./node_modules/.bin/coffeelint src",
+    "doc": "./node_modules/.bin/codo src"
   },
   "dependencies": {
     "underscore": "1.7.0"
@@ -30,6 +32,7 @@
   "devDependencies": {
     "body-parser": "1.10.1",
     "chai": "1.10.0",
+    "codo": "^2.0.9",
     "coffee-script": "1.8.0",
     "coffeelint": "1.8.1",
     "express": "4.10.7",

@@ -9,6 +9,9 @@ Gist
 Raport
 ======
 
+Features
+========
+
 
 Example
 =======
@@ -29,23 +32,9 @@ Contributing
  - make sure existing tests still pass
  - make sure test coverage does not decrease
  - run coffeelint on the source code
+ - make sure you document your code and generated code looks ok.
 7. Have my kindest thanks for making this project better.
 
-Changelog
-=========
-
-Version 1.0.0 - Jan 13, 2015
--------------
-* Bump major version! This version is no longer compatible with previous ones!
-* Huge rethink of the module to improve extendability.
-* Port the code to coffeescript for better maintanability.
-* Update to latest versions of mongoose and express.
-* Add code documentations.
-* Add code coverage.
-* Add examples.
-
-Version 0.1.9 - Dec 8, 2012
--------------
 
 Licence
 =======

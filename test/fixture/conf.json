@@ -1,7 +1,7 @@
 {
     "mongo": {
         "host": "localhost",
-        "port": 27107,
-        "db": "test"
+        "port": 27017,
+        "db": "mortimer"
     }
 }
