@@ -4,30 +4,35 @@ mortimer = MOngoose ResT
 Gist
 ====
 
-**Mortimer** is an extendible REST interface for mongoose models, designed for the entire project lifecycle: from fast prototyping to custom functionality.
+**Mortimer** is an extendible REST interface for mongoose models, designed for the entire project lifecycle: from fast prototyping to advanced custom functionality.
 
-Raport
+Status
 ======
 
 [![NPM](https://nodei.co/npm/mortimer.png?downloads=true&stars=true)](https://nodei.co/npm/mortimer/)
 
-[![NPM](https://nodei.co/npm/mortimer.png?months=6)](https://nodei.co/npm-dl/mortimer/)
+[![NPM](https://nodei.co/npm-dl/mortimer.png?months=12)](https://nodei.co/npm-dl/mortimer/)
 
-
-| Indicator     |               |
-|:-------------|:-------------|
-| documentation | [coffedoc.info][http://coffeedoc.info/github/topliceanu/mortimer/master/]|
+| Indicator              |                                                                          |
+|:-----------------------|:-------------------------------------------------------------------------|
+| documentation          | [coffedoc.info](http://coffeedoc.info/github/topliceanu/mortimer/master/)|
 | continuous integration | [![Build Status](https://travis-ci.org/topliceanu/mortimer.svg?branch=master)](https://travis-ci.org/topliceanu/mortimer) |
-| dependency management | [![Dependency Status](https://david-dm.org/alanshaw/david.svg?style=flat)](https://david-dm.org/alanshaw/david) [![devDependency Status](https://david-dm.org/alanshaw/david/dev-status.svg?style=flat)](https://david-dm.org/alanshaw/david#info=devDependencies) |
-| code coverage | [![Coverage Status](https://coveralls.io/repos/topliceanu/mortimer/badge.svg)](https://coveralls.io/r/topliceanu/mortimer) |dd
-
+| dependency management  | [![Dependency Status](https://david-dm.org/topliceanu/mortimer.svg?style=flat)](https://david-dm.org/topliceanu/mortimer) [![devDependency Status](https://david-dm.org/topliceanu/mortimer/dev-status.svg?style=flat)](https://david-dm.org/topliceanu/mortimer#info=devDependencies) |
+| code coverage          | [![Coverage Status](https://coveralls.io/repos/topliceanu/mortimer/badge.svg)](https://coveralls.io/r/topliceanu/mortimer) |dd
+| examples               |
 
 Features
 ========
 
+- Focus on extensibility. Fully plugable!
+- Does not depend on mongoose or express packages. It just builds arrays of middleware functions ;)
+- Easy to bootstrap a basic REST API.
+- Supports filtering, pagination, sorting, property selection.
 
 Example
 =======
+
+
 
 Contributing
 ============
