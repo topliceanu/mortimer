@@ -9,6 +9,19 @@ Gist
 Raport
 ======
 
+[![NPM](https://nodei.co/npm/mortimer.png?downloads=true&stars=true)](https://nodei.co/npm/mortimer/)
+
+[![NPM](https://nodei.co/npm/mortimer.png?months=6)](https://nodei.co/npm-dl/mortimer/)
+
+
+| Indicator     |               |
+|:-------------|:-------------|
+| documentation | [coffedoc.info][http://coffeedoc.info/github/topliceanu/mortimer/master/]|
+| continuous integration | [![Build Status](https://travis-ci.org/topliceanu/mortimer.svg?branch=master)](https://travis-ci.org/topliceanu/mortimer) |
+| dependency management | [![Dependency Status](https://david-dm.org/alanshaw/david.svg?style=flat)](https://david-dm.org/alanshaw/david) [![devDependency Status](https://david-dm.org/alanshaw/david/dev-status.svg?style=flat)](https://david-dm.org/alanshaw/david#info=devDependencies) |
+| code coverage | [![Coverage Status](https://coveralls.io/repos/topliceanu/mortimer/badge.svg)](https://coveralls.io/r/topliceanu/mortimer) |dd
+
+
 Features
 ========
 
@@ -28,6 +41,7 @@ Contributing
  - See `./vagrant_boostrap.sh` for instructions on how to setup all dependencies on a fresh ubuntu machine.
 5. Run the tests to make sure you have a correct setup: `$ mocha`
 6. Submit a pull request with your code
+ - make sure code is linted (tests too). Use coffeelint for that too.
  - make sure you add tests to your idea
  - make sure existing tests still pass
  - make sure test coverage does not decrease
