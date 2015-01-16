@@ -19,7 +19,7 @@ Status
 | continuous integration | [![Build Status](https://travis-ci.org/topliceanu/mortimer.svg?branch=master)](https://travis-ci.org/topliceanu/mortimer) |
 | dependency management  | [![Dependency Status](https://david-dm.org/topliceanu/mortimer.svg?style=flat)](https://david-dm.org/topliceanu/mortimer) [![devDependency Status](https://david-dm.org/topliceanu/mortimer/dev-status.svg?style=flat)](https://david-dm.org/topliceanu/mortimer#info=devDependencies) |
 | code coverage          | [![Coverage Status](https://coveralls.io/repos/topliceanu/mortimer/badge.svg)](https://coveralls.io/r/topliceanu/mortimer) |dd
-| examples               | [/examples](https://github.com/topliceanu/mortimer/tree/master/example) |
+| examples               | [/examples](https://github.com/topliceanu/mortimer/tree/master/examples) |
 | development management | [![Stories in Ready](https://badge.waffle.io/topliceanu/mortimer.svg?label=ready&title=Ready)](http://waffle.io/topliceanu/mortimer) |
 
 Features
@@ -89,12 +89,13 @@ See more in the `/examples` directory. All examples have instructions on __how t
 Contributing
 ============
 
-1. Contributions to this project are more than welcomed. Anything from improving docs, code cleanup to advanced functionality is greatly appreciated.
-    - Before you start working on an ideea, please open an issue and describe in detail what you want to do and why.
-    - You will get an answer in max 12h.
-2. Clone the repo `$ git clone git@github.com:topliceanu/mortimer.git`
+1. Contributions to this project are more than welcomed!
+    - Anything from improving docs, code cleanup to advanced functionality is greatly appreciated.
+    - Before you start working on an ideea, please open an issue and describe in detail what you want to do and __why it's important__.
+    - You will get an answer in max 12h depending on your timezone.
+2. Fork the repo!
 3. If you use [vagrant](https://www.vagrantup.com/) then simply clone the repo into a folder then issue `$ vagrant up`
-    - if you don't use it, please consider learning it, it's easy to install and get started with.
+    - if you don't use it, please consider learning it, it's easy to install and to get started with.
     - If you don't use it, then you have to:
          - install mongodb and have it running on `localhost:27017`.
          - install node.js and all node packages required in development using `$ npm install`
@@ -106,7 +107,7 @@ Contributing
  - make sure test coverage does not decrease. This project uses [coveralls.io][https://coveralls.io/]
  - make sure you document your code and generated code looks ok. This project uses [codo](https://github.com/coffeedoc/codo). Check out their comment style guides.
  - hit me up for a code review!
-5. Have my kindest thanks for making this project better.
+5. Have my kindest thanks for making this project better!
 
 
 Licence
