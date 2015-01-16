@@ -15,44 +15,98 @@ Status
 
 | Indicator              |                                                                          |
 |:-----------------------|:-------------------------------------------------------------------------|
-| documentation          | [coffedoc.info](http://coffeedoc.info/github/topliceanu/mortimer/master/)|
+| documentation          | [hosted on coffedoc.info](http://coffeedoc.info/github/topliceanu/mortimer/master/)|
 | continuous integration | [![Build Status](https://travis-ci.org/topliceanu/mortimer.svg?branch=master)](https://travis-ci.org/topliceanu/mortimer) |
 | dependency management  | [![Dependency Status](https://david-dm.org/topliceanu/mortimer.svg?style=flat)](https://david-dm.org/topliceanu/mortimer) [![devDependency Status](https://david-dm.org/topliceanu/mortimer/dev-status.svg?style=flat)](https://david-dm.org/topliceanu/mortimer#info=devDependencies) |
 | code coverage          | [![Coverage Status](https://coveralls.io/repos/topliceanu/mortimer/badge.svg)](https://coveralls.io/r/topliceanu/mortimer) |dd
-| examples               |
+| examples               | [/examples](https://github.com/topliceanu/mortimer/tree/master/example) |
+| development management | [![Stories in Ready](https://badge.waffle.io/topliceanu/mortimer.svg?label=ready&title=Ready)](http://waffle.io/topliceanu/mortimer) |
 
 Features
 ========
 
 - Focus on extensibility. Fully plugable!
-- Does not depend on mongoose or express packages. It just builds arrays of middleware functions ;)
-- Easy to bootstrap a basic REST API.
+- Does not depend on mongoose or express packages. It just builds arrays of middleware functions.
+- Easy to bootstrap a basic REST API for your models.
 - Supports filtering, pagination, sorting, property selection.
 
-Example
+Install
 =======
 
+```shell
+npm install mortimer
+```
 
+Quick Example
+=============
+
+```javascript
+var bodyParser = require('body-parser');
+var express = require('express');
+var mongoose = require('mongoose');
+var mortimer = require('../lib/'); // require('mortimer');
+
+
+// Handle connection to mongodb and data modeling.
+mongoose.connect('mongodb://localhost:27017/examples');
+
+var BookSchema = new mongoose.Schema({
+    'title': {type: String},
+    'author': {type: String}
+});
+
+var Book = mongoose.model('Book', BookSchema);
+
+
+// Setup http server with express.
+var app = express();
+app.set('query parser', 'simple');
+app.use(bodyParser.json());
+
+
+// Setup mortimer endpoints.
+var resource = new mortimer.Resource(Book);
+app.post('/books', resource.createDoc());
+app.get('/books', resource.readDocs());
+app.get('/books/:bookId', resource.readDoc());
+app.patch('/books/:bookId', resource.patchDoc());
+app.delete('/books/:bookId', resource.removeDoc());
+
+
+// Start the http server on http://localhost:3000/
+app.listen(3000, 'localhost');
+```
+
+More Examples
+=============
+
+See more in the `/examples` directory. All examples have instructions on __how to run and test them__.
+
+- if you want to quickly bootstrap a rest api, check out [this example](https://github.com/topliceanu/mortimer/blob/master/examples/quick-bootstrap.js). You can rapidly define your own routes and let mortimer handle the requests.
+- if you want to add middleware in front of every endpoint, check out [this example](https://github.com/topliceanu/mortimer/blob/master/examples/add-auth-to-create-endpoint.js). This can be usefull to add authentication, rate limiting, payload validation, output sanitation, etc. Mortimer is a backbone for all that.
+- if you want to add custom functionality to just one middleware, check out [this example](https://github.com/topliceanu/mortimer/blob/master/examples/extend-existing-middleware-functionality.js)
 
 Contributing
 ============
 
-1. Before starting to work on an ideea, please open an issue. You will get an answer ASAP.
+1. Contributions to this project are more than welcomed. Anything from improving docs, code cleanup to advanced functionality is greatly appreciated.
+    - Before you start working on an ideea, please open an issue and describe in detail what you want to do and why.
+    - You will get an answer in max 12h.
 2. Clone the repo `$ git clone git@github.com:topliceanu/mortimer.git`
 3. If you use [vagrant](https://www.vagrantup.com/) then simply clone the repo into a folder then issue `$ vagrant up`
-4. If you don't use it, then:
- - install mongodb and have it running on `localhost:27017`.
- - install node.js and all node packages required in development using `$ npm install`
- - See `./vagrant_boostrap.sh` for instructions on how to setup all dependencies on a fresh ubuntu machine.
-5. Run the tests to make sure you have a correct setup: `$ mocha`
-6. Submit a pull request with your code
- - make sure code is linted (tests too). Use coffeelint for that too.
- - make sure you add tests to your idea
- - make sure existing tests still pass
- - make sure test coverage does not decrease
- - run coffeelint on the source code
- - make sure you document your code and generated code looks ok.
-7. Have my kindest thanks for making this project better.
+    - if you don't use it, please consider learning it, it's easy to install and get started with.
+    - If you don't use it, then you have to:
+         - install mongodb and have it running on `localhost:27017`.
+         - install node.js and all node packages required in development using `$ npm install`
+         - For reference, see `./vagrant_boostrap.sh` for instructions on how to setup all dependencies on a fresh ubuntu 14.04 machine.
+    - Run the tests to make sure you have a correct setup: `$ ./node_modules/.bin/mocha`
+4. Submit a pull request with your code
+ - make sure code is linted (tests too). Use coffeelint for that, in project root, issue `$ ./node_modules/.bin/coffeelint ./src`
+ - make sure you add tests for your feature. In the end all tests have to pass! To run test suite, in project root, issue `$ ./node_modules/.bin/mocha`
+ - make sure test coverage does not decrease. This project uses [coveralls.io][https://coveralls.io/]
+ - make sure you document your code and generated code looks ok. This project uses [codo](https://github.com/coffeedoc/codo). Check out their comment style guides.
+ - hit me up for a code review!
+5. Have my kindest thanks for making this project better.
 
 
 Licence
