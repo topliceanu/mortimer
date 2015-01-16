@@ -1,6 +1,6 @@
 {
   "name": "mortimer",
-  "version": "2.0.1",
+  "version": "1.0.0",
   "description": "rest interface for mongoose models, built on top of express",
   "homepage": "http://github.com/topliceanu/mortimer",
   "license": "MIT",
@@ -30,14 +30,12 @@
     "doc": "./node_modules/.bin/codo src"
   },
   "dependencies": {
-    "coffee-coverage": "^0.4.4",
-    "istanbul": "^0.3.5",
     "underscore": "1.7.0"
   },
   "devDependencies": {
     "body-parser": "1.10.1",
     "chai": "1.10.0",
-    "codo": "^2.0.9",
+    "codo": "2.0.9",
     "coffee-coverage": "0.4.4",
     "coffee-script": "1.8.0",
     "coffeelint": "1.8.1",
