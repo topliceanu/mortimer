@@ -1,9 +1,9 @@
+doc/
+coverage/
+examples/
 src/
 test/
-example/
-doc/
 coffeelint.json
-Vagrantfile
+LICENSE
 vagrant_bootstrap.sh
-README.md
-ICENSE
+Vagrantfile

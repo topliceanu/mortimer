@@ -100,12 +100,13 @@ Contributing
          - install mongodb and have it running on `localhost:27017`.
          - install node.js and all node packages required in development using `$ npm install`
          - For reference, see `./vagrant_boostrap.sh` for instructions on how to setup all dependencies on a fresh ubuntu 14.04 machine.
-    - Run the tests to make sure you have a correct setup: `$ ./node_modules/.bin/mocha`
-4. Submit a pull request with your code
- - make sure code is linted (tests too). Use coffeelint for that, in project root, issue `$ ./node_modules/.bin/coffeelint ./src`
- - make sure you add tests for your feature. In the end all tests have to pass! To run test suite, in project root, issue `$ ./node_modules/.bin/mocha`
- - make sure test coverage does not decrease. This project uses [coveralls.io][https://coveralls.io/]
- - make sure you document your code and generated code looks ok. This project uses [codo](https://github.com/coffeedoc/codo). Check out their comment style guides.
+    - Run the tests to make sure you have a correct setup: `$ npm run test`
+4. Create a new branch and implement your feature.
+ - make sure you add tests for your feature. In the end __all tests have to pass__! To run test suite `$ npm run test`.
+ - make sure test coverage does not decrease. Run `$ npm run coverage` to open a browser window with the coverage report.
+ - make sure you document your code and generated code looks ok. Run `$ npm run doc` to re-generate the documentation.
+ - make sure code is linted (and tests too). Run `$ npm run lint`
+ - submit a pull request with your code.
  - hit me up for a code review!
 5. Have my kindest thanks for making this project better!
 

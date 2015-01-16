@@ -3,5 +3,5 @@ node_js:
     - 0.10
 services:
     - mongodb
-after_script:
+after_success:
     - npm run coveralls
