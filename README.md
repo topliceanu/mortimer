@@ -18,7 +18,7 @@ Status
 | documentation          | [hosted on coffedoc.info](http://coffeedoc.info/github/topliceanu/mortimer/master/)|
 | continuous integration | [![Build Status](https://travis-ci.org/topliceanu/mortimer.svg?branch=master)](https://travis-ci.org/topliceanu/mortimer) |
 | dependency management  | [![Dependency Status](https://david-dm.org/topliceanu/mortimer.svg?style=flat)](https://david-dm.org/topliceanu/mortimer) [![devDependency Status](https://david-dm.org/topliceanu/mortimer/dev-status.svg?style=flat)](https://david-dm.org/topliceanu/mortimer#info=devDependencies) |
-| code coverage          | [![Coverage Status](https://coveralls.io/repos/topliceanu/mortimer/badge.svg)](https://coveralls.io/r/topliceanu/mortimer) |dd
+| code coverage          | [![Coverage Status](https://coveralls.io/repos/topliceanu/mortimer/badge.svg?branch=master)](https://coveralls.io/r/topliceanu/mortimer?branch=master) |
 | examples               | [/examples](https://github.com/topliceanu/mortimer/tree/master/examples) |
 | development management | [![Stories in Ready](https://badge.waffle.io/topliceanu/mortimer.svg?label=ready&title=Ready)](http://waffle.io/topliceanu/mortimer) |
 
