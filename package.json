@@ -5,6 +5,7 @@
   "homepage": "http://github.com/topliceanu/mortimer",
   "license": "MIT",
   "keywords": [
+    "coffee",
     "rest",
     "mongoose",
     "mongodb",
