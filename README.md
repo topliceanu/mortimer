@@ -44,7 +44,7 @@ Quick Example
 var bodyParser = require('body-parser');
 var express = require('express');
 var mongoose = require('mongoose');
-var mortimer = require('../lib/'); // require('mortimer');
+var mortimer = require('mortimer');
 
 
 // Handle connection to mongodb and data modeling.
