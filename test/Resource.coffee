@@ -30,6 +30,7 @@ describe 'Resource', ->
         @app.get '/books/count', @rest.countDocs()
         @app.get '/books/:bookId', @rest.readDoc()
         @app.patch '/books/:bookId', @rest.patchDoc()
+        @app.put '/books/:bookId', @rest.putDoc()
         @app.delete '/books/:bookId', @rest.removeDoc()
         @app.get '/books', @rest.readDocs()
         @app.post '/books', @rest.createDoc()
@@ -198,6 +199,36 @@ describe 'Resource', ->
                 assert.equal book.title, @book1.title,
                     'should have remained to the old version of title'
             .then (-> done()), done
+
+    describe '.putDoc()', ->
+
+        it 'should replace existing resource with request body', (done) ->
+            payload =
+                title: 'book11'
+                author: 'author11'
+            call = request(@server)
+                .put("/books/#{@book1._id}")
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+                .send(payload)
+            (Q.ninvoke call, 'end').then (res) =>
+                assert.equal res.statusCode, 200, 'should return an error'
+                assert.equal req.body.data.title, payload.title
+                assert.equal req.body.data.author, payload.author
+                assert.isNull req.body.data.details,
+                    'should no longer have details'
+
+                # Check in the database.
+                query = Book.findOne()
+                    .where("_id").equals(@book1._id)
+                Q.ninvoke query, 'exec'
+            .then (book) =>
+                assert.equal book.title, payload.title
+                assert.equal book.author, payload.author
+                assert.isNull book.details,
+                    'should no longer have details'
+            .then (-> done()), done
+
 
     describe '.removeDoc()', ->
 

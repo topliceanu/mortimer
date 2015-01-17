@@ -104,6 +104,23 @@ class Resource
             @publish statusCode: 200
         ]
 
+    # Middleware stack which replaces existing resource with the provided
+    # request body.
+    #
+    # @example Bind this middleware to an express endpoint.
+    #   var bookResource = new Resource(BookModel);
+    #   // ...
+    #   app.put('/books/:bookId', bookResource.putDoc());
+    #
+    putDoc: (options = {}) ->
+        [
+            @namespace()
+            @put()
+            @read()
+            @execute()
+            @publish statusCode: 200
+        ]
+
     # Middleware stack which removes a document specified by id.
     #
     # @example Bind this middleware to an express endpoint.
@@ -245,6 +262,23 @@ class Resource
                     return res.status(500).send msg: "Error patching document"
 
                 next()
+
+    # Middleware replaces a document with the provided body.
+    put: (options = {}) ->
+        (req, res, next) =>
+            id = req.params[@modelKey]
+            unless id?
+                return res.status(404).send msg: "Document id not provided"
+
+            #req.body._id = id
+            req[@ns].query = @Model.where({'_id': id})
+                .setOptions({safe: true, upsert: false, multi: false, overwrite: true})
+                .update req.body, (error) ->
+                    console.log '>>>>>>>>>>', arguments...
+                    if error?
+                        return res.status(500).send
+                            msg: "Error replacing document"
+                    next()
 
     # Middleware removes the specified document from the db if it
     # belongs to the current shop.
