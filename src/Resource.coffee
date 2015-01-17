@@ -9,8 +9,10 @@ _ = require 'underscore'
 #   // ...
 #   app.get('/books', bookResource.readDocs())
 #   app.post('/books', bookResource.createDoc())
+#   app.delete('/books', bookResource.removeDocs())
 #   app.get('/books/:bookId', bookResource.readDoc())
 #   app.patch('/books/:bookId', bookResource.patchDoc())
+#   app.put('/books/:bookId', bookResource.putDoc())
 #   app.delete('/books/:bookId', bookResource.removeDoc())
 #   // ...
 #
@@ -115,9 +117,9 @@ class Resource
     putDoc: (options = {}) ->
         [
             @namespace()
-            @put()
             @read()
             @execute()
+            @put()
             @publish statusCode: 200
         ]
 
@@ -161,6 +163,28 @@ class Resource
             @fields()
             @execute()
             @publish statusCode: 200
+        ]
+
+    # Middleware stask which removes all documents matched by the query filters.
+    #
+    # @example Bind this middleware to an express endpoint.
+    #   var bookResource = new Resource(BookModel);
+    #   // ...
+    #   app.delete('/books', bookResource.removeDocs());
+    #
+    # @param {Object} options pass options to middleware stack
+    # @return {Array<Function>} list of express compatible middleware functions.
+    #
+    removeDocs: (options = {}) ->
+        [
+            @namespace()
+            @readAll()
+            @pagination()
+            @filters()
+            @sort()
+            @execute()
+            @removeAll()
+            @publish statusCode: 200, empty: true
         ]
 
     # Middleware stack which returns the number of documents in a collection.
@@ -264,20 +288,29 @@ class Resource
                 next()
 
     # Middleware replaces a document with the provided body.
+    #
+    # Because no better way is available in mongoose, this middleware will
+    # remove the existing document the insert it again with the new data.
+    # Please note that this endpoint is not thread safe.
+    #
+    # @param req.<ns>.result {Object} instance of current Model to be replaced.
+    # @return {Function} middleware function
+    #
     put: (options = {}) ->
         (req, res, next) =>
-            id = req.params[@modelKey]
-            unless id?
-                return res.status(404).send msg: "Document id not provided"
+            req[@ns].result.remove (error) =>
+                if error?
+                    return res.status(500).send
+                        msg: "Failed to replace the document"
 
-            #req.body._id = id
-            req[@ns].query = @Model.where({'_id': id})
-                .setOptions({safe: true, upsert: false, multi: false, overwrite: true})
-                .update req.body, (error) ->
-                    console.log '>>>>>>>>>>', arguments...
+                document =  new @Model req.body
+                document._id = req[@ns].result._id
+                document.save (error) =>
                     if error?
                         return res.status(500).send
                             msg: "Error replacing document"
+
+                    req[@ns].result = document
                     next()
 
     # Middleware removes the specified document from the db if it
@@ -306,6 +339,21 @@ class Resource
         (req, res, next) =>
             req[@ns].query = @Model.find()
             next()
+
+    # Middleware to remove all documents selected previously.
+    #
+    # @param {Number|Object|Array<Object>} req.<ns>.result query result.
+    # @return {Function} middleware function
+    #
+    removeAll: (options = {}) ->
+        (req, res, next) =>
+            ids = _.pluck req[@ns].result, '_id'
+            @Model.where('_id').in(ids).remove (error) ->
+                if error?
+                    return res.status(500).send
+                        msg: 'Failed to remove selected documents'
+                next()
+
 
     # Middleware counts the number of items currently selected.
     #

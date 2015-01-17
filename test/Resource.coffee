@@ -28,6 +28,7 @@ describe 'Resource', ->
         @app.use bodyParser.json()
 
         @app.get '/books/count', @rest.countDocs()
+        @app.delete '/books', @rest.removeDocs()
         @app.get '/books/:bookId', @rest.readDoc()
         @app.patch '/books/:bookId', @rest.patchDoc()
         @app.put '/books/:bookId', @rest.putDoc()
@@ -213,9 +214,9 @@ describe 'Resource', ->
                 .send(payload)
             (Q.ninvoke call, 'end').then (res) =>
                 assert.equal res.statusCode, 200, 'should return an error'
-                assert.equal req.body.data.title, payload.title
-                assert.equal req.body.data.author, payload.author
-                assert.isNull req.body.data.details,
+                assert.equal res.body.data.title, payload.title
+                assert.equal res.body.data.author, payload.author
+                assert.isUndefined res.body.data.details,
                     'should no longer have details'
 
                 # Check in the database.
@@ -225,7 +226,7 @@ describe 'Resource', ->
             .then (book) =>
                 assert.equal book.title, payload.title
                 assert.equal book.author, payload.author
-                assert.isNull book.details,
+                assert.isUndefined book.details,
                     'should no longer have details'
             .then (-> done()), done
 
@@ -483,6 +484,24 @@ describe 'Resource', ->
                     assert.isUndefined res.body.data[1].author,
                         'author field should not be populated'
                 .then (-> done()), done
+
+    describe '.removeDocs()', ->
+
+        it 'should remove the documents selected by the query', (done) ->
+            call = request(@server)
+                .delete("/books?title__regex=1")
+                .set('Accept', 'application/json')
+            (Q.ninvoke call, 'end').then (res) ->
+                assert.equal res.statusCode, 200, 'should have worked ok'
+
+                # Check the database.
+                Q.ninvoke Book.find(), 'exec'
+            .then (books) =>
+                assert.lengthOf books, 1,
+                    'should have removed the matching documents'
+                assert.equal books[0]._id.toString(), @book2._id.toString(),
+                    'should have kept the book that does not match the filters'
+            .then (-> done()), done
 
     describe '.countDocs()', ->
 
