@@ -40,9 +40,13 @@ describe 'Resource', ->
         @book1 = new Book
             title: 'book1'
             author: 'author1'
+            details:
+                numPages: 300
         @book2 = new Book
             title: 'book2'
             author: 'author1'
+            details:
+                numPages: 400
         Q.all([
             Q.ninvoke @book1, 'save'
             Q.ninvoke @book2, 'save'
@@ -85,6 +89,29 @@ describe 'Resource', ->
                     'should have stored the new book'
             .then (-> done()), done
 
+        it 'should not a new book because of bad input data', (done) ->
+            payload =
+                name: 'book3'
+                writer: 'author1'
+
+            # Call the http endpoint.
+            call = request(@server)
+                .post("/books")
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+                .send(payload)
+            (Q.ninvoke call, 'end').then (res) ->
+                assert.equal res.statusCode, 500,
+                    'bad input data'
+
+                # Check in the database.
+                Q.ninvoke Book.count(), 'exec'
+            .then (numBooks) ->
+                assert.equal numBooks, 2,
+                    'should have found only the original 2 books'
+            .then (-> done()), done
+
+
     describe '.readDoc()', ->
 
         it 'should return an existing book record', (done) ->
@@ -97,6 +124,14 @@ describe 'Resource', ->
                     'correct title'
                 assert.equal res.body.data.author, @book1.author,
                     'correct author'
+            .then (-> done()), done
+
+        it 'should return 404 not found when id does not exist', (done) ->
+            call = request(@server)
+                .get("/books/123456781234567812345678")
+                .set('Accept', 'application/json')
+            (Q.ninvoke call, 'end').then (res) =>
+                assert.equal res.statusCode, 404, 'Ok'
             .then (-> done()), done
 
         describe '.fields() modifier', ->
@@ -142,6 +177,26 @@ describe 'Resource', ->
                     'should have persisted the changes'
                 assert.equal updatedBook.author, @book1.author,
                     'book document should not be changed'
+            .then (-> done()), done
+
+        it 'should return 500 for a failed update', (done) ->
+            payload =
+                title: null # `title` is expected to be a string.
+            call = request(@server)
+                .patch("/books/#{@book1._id}")
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+                .send(payload)
+            (Q.ninvoke call, 'end').then (res) =>
+                assert.equal res.statusCode, 500, 'should return an error'
+
+                # Check in the database.
+                query = Book.findOne()
+                    .where("_id").equals(@book1._id)
+                Q.ninvoke query, 'exec'
+            .then (book) =>
+                assert.equal book.title, @book1.title,
+                    'should have remained to the old version of title'
             .then (-> done()), done
 
     describe '.removeDoc()', ->
@@ -258,6 +313,66 @@ describe 'Resource', ->
                     assert.equal res.statusCode, 200,
                         'should return the correct value'
                     assert.deepEqual res.body.meta, {'title': 'book1'},
+                        'should return back the fitler'
+                    assert.lengthOf res.body.data, 1,
+                        'should return only the first book'
+                    assert.deepEqual res.body.data[0], (serialize @book1),
+                        'should return the first book'
+                .then (-> done()), done
+
+            it '__gt filter acts as strictly greater than', (done) ->
+                call = request(@server)
+                    .get('/books?details.numPages__gt=350')
+                    .set('Accept', 'application/json')
+                (Q.ninvoke call, 'end').then (res) =>
+                    assert.equal res.statusCode, 200,
+                        'should return the correct value'
+                    assert.deepEqual res.body.meta, {'details.numPages__gt': '350'},
+                        'should return back the fitler'
+                    assert.lengthOf res.body.data, 1,
+                        'should return only the first book'
+                    assert.deepEqual res.body.data[0], (serialize @book2),
+                        'should return the first book'
+                .then (-> done()), done
+
+            it '__gte filter acts as greater than or equal to', (done) ->
+                call = request(@server)
+                    .get('/books?details.numPages__gte=400')
+                    .set('Accept', 'application/json')
+                (Q.ninvoke call, 'end').then (res) =>
+                    assert.equal res.statusCode, 200,
+                        'should return the correct value'
+                    assert.deepEqual res.body.meta, {'details.numPages__gte': '400'},
+                        'should return back the fitler'
+                    assert.lengthOf res.body.data, 1,
+                        'should return only the first book'
+                    assert.deepEqual res.body.data[0], (serialize @book2),
+                        'should return the first book'
+                .then (-> done()), done
+
+            it '__lt filter acts as strictly less than', (done) ->
+                call = request(@server)
+                    .get('/books?details.numPages__lt=350')
+                    .set('Accept', 'application/json')
+                (Q.ninvoke call, 'end').then (res) =>
+                    assert.equal res.statusCode, 200,
+                        'should return the correct value'
+                    assert.deepEqual res.body.meta, {'details.numPages__lt': '350'},
+                        'should return back the fitler'
+                    assert.lengthOf res.body.data, 1,
+                        'should return only the first book'
+                    assert.deepEqual res.body.data[0], (serialize @book1),
+                        'should return the first book'
+                .then (-> done()), done
+
+            it '__lte filter acts as less than or equal to', (done) ->
+                call = request(@server)
+                    .get('/books?details.numPages__lte=300')
+                    .set('Accept', 'application/json')
+                (Q.ninvoke call, 'end').then (res) =>
+                    assert.equal res.statusCode, 200,
+                        'should return the correct value'
+                    assert.deepEqual res.body.meta, {'details.numPages__lte': '300'},
                         'should return back the fitler'
                     assert.lengthOf res.body.data, 1,
                         'should return only the first book'

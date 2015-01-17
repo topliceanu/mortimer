@@ -199,57 +199,12 @@ class Resource
         (req, res, next) =>
             id = req.params[@modelKey]
             unless id?
-                return res.send 404, msg: "Document id not provided"
+                return res.status(404).send msg: "Document id not provided"
 
             req[@ns].query = @Model.findOne()
                 .where('_id').equals(id)
 
             next()
-
-    # Executes the current built query. It will set the the
-    # results in req.vt.result or return an error message if
-    # something goes wrong.
-    #
-    # @param {mongoose.Query} req.<ns>.query query for mongodb.
-    # @param {Number|Object|Array<Object>} req.<ns>.result query result.
-    # @return {Function} middleware function
-    #
-    execute: (options = {}) ->
-        (req, res, next) =>
-            req[@ns].query.exec (error, documents) =>
-                if error?
-                    return res.status(500).send
-                        msg: "Error fetching data"
-                unless documents?
-                    return res.status(404).send
-                        msg: 'Unable to find documents to match query'
-                req[@ns].result = documents
-                next()
-
-    # Middleware prints the results of a previously executed Query.
-    #
-    # @param req.<ns>.result {Object} results from mongoose.Query
-    #                                 instance, it's either a Document
-    #                                 or an array of Documents.
-    # @param {Object} options
-    # @param options {Number} statusCode status code  returned to the client.
-    # @param options {Boolean} empty - if the response payload should be empty.
-    # @return {Function} middleware function
-    #
-    publish: (options = {}) ->
-        (req, res, next) =>
-            options.statusCode ?= 200
-            res.status options.statusCode
-
-            options.empty ?= false
-            if options.empty is true
-                return res.send()
-
-            output =
-                meta: _.clone req.query
-                data: @format req[@ns].result
-            res.send output
-
 
     # Middleware creates a document of the current model type
     # from the request json payload. It also publishes the
@@ -264,7 +219,8 @@ class Resource
             document = new @Model req.body
             document.save (errors) =>
                 if errors?
-                    return res.vt.send 500, msg: 'Error storing new document'
+                    return res.status(500).send
+                        msg: 'Error storing new document'
 
                 req[@ns].result = document
                 return next()
@@ -286,7 +242,7 @@ class Resource
 
             req[@ns].result.save (error) ->
                 if error?
-                    return res.send 500, msg: "Error patching document"
+                    return res.status(500).send msg: "Error patching document"
 
                 next()
 
@@ -301,7 +257,7 @@ class Resource
         (req, res, next) =>
             req[@ns].result.remove (error) ->
                 if error?
-                    return res.vt.send 500, 'error removing document'
+                    return res.status(500).send msg: 'error removing document'
 
                 return next()
 
@@ -330,6 +286,50 @@ class Resource
 
                 req[@ns].result = count
                 next()
+
+    # Executes the current built query. It will set the the
+    # results in req.<ns>.result or return an error message if
+    # something goes wrong.
+    #
+    # @param {mongoose.Query} req.<ns>.query query for mongodb.
+    # @param {Number|Object|Array<Object>} req.<ns>.result query result.
+    # @return {Function} middleware function
+    #
+    execute: (options = {}) ->
+        (req, res, next) =>
+            req[@ns].query.exec (error, documents) =>
+                if error?
+                    return res.status(500).send
+                        msg: error.message
+                unless documents?
+                    return res.status(404).send
+                        msg: 'Resources not found'
+                req[@ns].result = documents
+                next()
+
+    # Middleware prints the results of a previously executed Query.
+    #
+    # @param req.<ns>.result {Object} results from mongoose.Query
+    #                                 instance, it's either a Document
+    #                                 or an array of Documents.
+    # @param {Object} options
+    # @param options {Number} statusCode status code  returned to the client.
+    # @param options {Boolean} empty - if the response payload should be empty.
+    # @return {Function} middleware function
+    #
+    publish: (options = {}) ->
+        (req, res, next) =>
+            options.statusCode ?= 200
+            res.status options.statusCode
+
+            options.empty ?= false
+            if options.empty is true
+                return res.send()
+
+            output =
+                meta: _.clone req.query
+                data: @format req[@ns].result
+            res.send output
 
     # QUERY MODIFIERS
 
@@ -451,7 +451,7 @@ class Resource
     #
     # @param req.query {Object} dict with url query string params.
     # @param req.query._sort {Object} the field/order to sort by.
-    # @param req.vt.query {Object} instance of mongoose.Query to
+    # @param req.<ns>.query {Object} instance of mongoose.Query to
     #                                fetch models from database.
     # @return {Function} middleware function
     #
