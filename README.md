@@ -1,4 +1,4 @@
-### mortimer = MOngoose ResT
+# mortimer = MOngoose ResT
 
 ## Gist
 
