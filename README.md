@@ -1,13 +1,10 @@
-mortimer = MOngoose ResT
-========================
+### mortimer = MOngoose ResT
 
-Gist
-====
+## Gist
 
 **Mortimer** is an extendible REST interface for mongoose models, designed for the entire project lifecycle: from fast prototyping to advanced custom functionality.
 
-Status
-======
+## Status
 
 [![NPM](https://nodei.co/npm/mortimer.png?downloads=true&stars=true)](https://nodei.co/npm/mortimer/)
 
@@ -21,24 +18,22 @@ Status
 | code coverage          | [![Coverage Status](https://coveralls.io/repos/topliceanu/mortimer/badge.svg?branch=master)](https://coveralls.io/r/topliceanu/mortimer?branch=master) |
 | examples               | [/examples](https://github.com/topliceanu/mortimer/tree/master/examples) |
 | development management | [![Stories in Ready](https://badge.waffle.io/topliceanu/mortimer.svg?label=ready&title=Ready)](http://waffle.io/topliceanu/mortimer) |
+| change log             | [CHANGELOG](https://github.com/topliceanu/mortimer/blob/master/CHANGELOG.md) [Releases](https://github.com/topliceanu/mortimer/releases) |
 
-Features
-========
+## Features
 
 - Focus on extensibility. Fully plugable!
 - Does not depend on mongoose or express packages. It just builds arrays of middleware functions.
 - Easy to bootstrap a basic REST API for your models.
 - Supports filtering, pagination, sorting, property selection.
 
-Install
-=======
+## Install
 
 ```shell
 npm install mortimer
 ```
 
-Quick Example
-=============
+## Quick Example
 
 ```javascript
 var bodyParser = require('body-parser');
@@ -77,8 +72,7 @@ app.delete('/books/:bookId', resource.removeDoc());
 app.listen(3000, 'localhost');
 ```
 
-More Examples
-=============
+## More Examples
 
 See more in the `/examples` directory. All examples have instructions on __how to run and test them__.
 
@@ -86,8 +80,7 @@ See more in the `/examples` directory. All examples have instructions on __how t
 - if you want to add middleware in front of every endpoint, check out [this example](https://github.com/topliceanu/mortimer/blob/master/examples/add-auth-to-create-endpoint.js). This can be usefull to add authentication, rate limiting, payload validation, output sanitation, etc. Mortimer is a backbone for all that.
 - if you want to add custom functionality to just one middleware, check out [this example](https://github.com/topliceanu/mortimer/blob/master/examples/extend-existing-middleware-functionality.js)
 
-Contributing
-============
+## Contributing
 
 1. Contributions to this project are more than welcomed!
     - Anything from improving docs, code cleanup to advanced functionality is greatly appreciated.
@@ -111,8 +104,7 @@ Contributing
 5. Have my kindest thanks for making this project better!
 
 
-Licence
-=======
+## Licence
 
 (The MIT License)
 

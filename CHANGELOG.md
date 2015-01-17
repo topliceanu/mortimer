@@ -1,8 +1,6 @@
-Changelog
-=========
+### Changelog
 
-Version 1.0.0 - Jan 13, 2015
--------------
+## Version 1.0.0 - Jan 13, 2015
 * Bump major version! This version is no longer compatible with previous ones!
 * Huge rethink of the module to improve extendability.
 * Port the code to coffeescript for better maintanability.
@@ -11,5 +9,5 @@ Version 1.0.0 - Jan 13, 2015
 * Add code coverage.
 * Add examples.
 
-Version 0.1.9 - Dec 8, 2012
--------------
+## Version 0.1.9 - Dec 8, 2012
+* A log time ago!

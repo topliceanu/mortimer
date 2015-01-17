@@ -3,3 +3,5 @@
 --readme ./README.md
 --title "mortimer docs"
 ./src
+-
+CHANGELOG.md
