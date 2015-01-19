@@ -353,6 +353,21 @@ describe 'Resource', ->
                         'should return the first book'
                 .then (-> done()), done
 
+            it '__ne filter acts as not equal to value', (done) ->
+                call = request(@server)
+                    .get('/books?title__ne=book1')
+                    .set('Accept', 'application/json')
+                (Q.ninvoke call, 'end').then (res) =>
+                    assert.equal res.statusCode, 200,
+                        'should return the correct value'
+                    assert.deepEqual res.body.meta, {'title__ne': 'book1'},
+                        'should return back the fitler'
+                    assert.lengthOf res.body.data, 1,
+                        'should return only the first book'
+                    assert.deepEqual res.body.data[0], (serialize @book2),
+                        'should return the first book'
+                .then (-> done()), done
+
             it '__gt filter acts as strictly greater than', (done) ->
                 call = request(@server)
                     .get('/books?details.numPages__gt=350')
