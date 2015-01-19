@@ -30,9 +30,12 @@ describe 'Resource', ->
         @app.get '/books/count', @rest.countDocs()
         @app.get '/books/:bookId', @rest.readDoc()
         @app.patch '/books/:bookId', @rest.patchDoc()
+        @app.put '/books/:bookId', @rest.putDoc()
         @app.delete '/books/:bookId', @rest.removeDoc()
         @app.get '/books', @rest.readDocs()
+        @app.patch '/books', @rest.patchDocs()
         @app.post '/books', @rest.createDoc()
+        @app.delete '/books', @rest.removeDocs()
 
         @server = http.createServer @app
 
@@ -199,6 +202,36 @@ describe 'Resource', ->
                     'should have remained to the old version of title'
             .then (-> done()), done
 
+    describe '.putDoc()', ->
+
+        it 'should replace existing resource with request body', (done) ->
+            payload =
+                title: 'book11'
+                author: 'author11'
+            call = request(@server)
+                .put("/books/#{@book1._id}")
+                .set('Content-Type', 'application/json')
+                .set('Accept', 'application/json')
+                .send(payload)
+            (Q.ninvoke call, 'end').then (res) =>
+                assert.equal res.statusCode, 200, 'should return an error'
+                assert.equal res.body.data.title, payload.title
+                assert.equal res.body.data.author, payload.author
+                assert.isUndefined res.body.data.details,
+                    'should no longer have details'
+
+                # Check in the database.
+                query = Book.findOne()
+                    .where("_id").equals(@book1._id)
+                Q.ninvoke query, 'exec'
+            .then (book) =>
+                assert.equal book.title, payload.title
+                assert.equal book.author, payload.author
+                assert.isUndefined book.details,
+                    'should no longer have details'
+            .then (-> done()), done
+
+
     describe '.removeDoc()', ->
 
         it 'should remove an existing book record', (done) ->
@@ -317,6 +350,21 @@ describe 'Resource', ->
                     assert.lengthOf res.body.data, 1,
                         'should return only the first book'
                     assert.deepEqual res.body.data[0], (serialize @book1),
+                        'should return the first book'
+                .then (-> done()), done
+
+            it '__ne filter acts as not equal to value', (done) ->
+                call = request(@server)
+                    .get('/books?title__ne=book1')
+                    .set('Accept', 'application/json')
+                (Q.ninvoke call, 'end').then (res) =>
+                    assert.equal res.statusCode, 200,
+                        'should return the correct value'
+                    assert.deepEqual res.body.meta, {'title__ne': 'book1'},
+                        'should return back the fitler'
+                    assert.lengthOf res.body.data, 1,
+                        'should return only the first book'
+                    assert.deepEqual res.body.data[0], (serialize @book2),
                         'should return the first book'
                 .then (-> done()), done
 
@@ -452,6 +500,56 @@ describe 'Resource', ->
                     assert.isUndefined res.body.data[1].author,
                         'author field should not be populated'
                 .then (-> done()), done
+
+    describe '.removeDocs()', ->
+
+        describe '.filter() modifier', ->
+
+            it 'should remove the documents selected by the query', (done) ->
+                call = request(@server)
+                    .delete("/books?title__regex=1")
+                    .set('Accept', 'application/json')
+                (Q.ninvoke call, 'end').then (res) ->
+                    assert.equal res.statusCode, 200, 'should have worked ok'
+
+                    # Check the database.
+                    Q.ninvoke Book.find(), 'exec'
+                .then (books) =>
+                    assert.lengthOf books, 1,
+                        'should have removed the matching documents'
+                    assert.equal books[0]._id.toString(), @book2._id.toString(),
+                        'should have kept the book that does not match the filters'
+                .then (-> done()), done
+
+    describe '.patchDocs()', ->
+
+        describe '.fiter() modifier', ->
+
+            it 'should update all selected books', (done) ->
+                payload =
+                    author: 'author11'
+                call = request(@server)
+                    .patch('/books?author__eq=author1')
+                    .set('Content-type': 'application/json')
+                    .set('Accept', 'application/json')
+                    .send(payload)
+                (Q.ninvoke call, 'end').then (res) ->
+                    assert.equal res.statusCode, 200, 'should have worked ok'
+                    assert.deepEqual res.body.meta,
+                        {'author__eq': 'author1'},
+                        'added metadata to the response'
+
+                    # Check the database.
+                    Q.ninvoke Book.find(), 'exec'
+                .then (books) =>
+                    assert.lengthOf books, 2,
+                        'should have the same number of books'
+                    assert.equal books[0].author, payload.author,
+                        'should have updated the first book'
+                    assert.equal books[1].author, payload.author,
+                        'should have updated the second book'
+                .then (-> done()), done
+
 
     describe '.countDocs()', ->
 

@@ -63,8 +63,12 @@ app.use(bodyParser.json());
 var resource = new mortimer.Resource(Book);
 app.post('/books', resource.createDoc());
 app.get('/books', resource.readDocs());
+app.get('/books/count', resource.countDocs());
+app.patch('/books', resource.patchDocs());
+app.delete('/books', resource.removeDocs());
 app.get('/books/:bookId', resource.readDoc());
 app.patch('/books/:bookId', resource.patchDoc());
+app.put('/books/:bookId', resource.putDoc());
 app.delete('/books/:bookId', resource.removeDoc());
 
 
