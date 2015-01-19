@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset='UTF-8'>
+  <title>mortimer docs</title>
+  <script src='../javascript/application.js'></script>
+  <script src='../javascript/search.js'></script>
+  <link rel='stylesheet' href='../stylesheets/application.css' type='text/css'>
+</head>
+  <body>
+    <div id='base' data-path='../'></div>
+<div id='header'>
+  <div id='menu'>
+    <a href='../extra/README.md.html' title='mortimer'>
+      mortimer
+    </a>
+    &raquo;
+    <a href='../alphabetical_index.html' title='Index'>
+      Index
+    </a>
+    &raquo;
+    <span class='title'>README.md</span>
+  </div>
+</div>
+    <div id='content'>
+      <nav class='toc'>
+        <p class='title'>
+          <a class='hide_toc' href='#'>
+            <strong>Table of Contents</strong>
+          </a>
+          <small>
+            (<a class='float_toc' href='#'>left</a>)
+          </small>
+        </p>
+      </nav>
+      <div id='filecontents'>
+        <h1 id="mortimer-mongoose-rest">mortimer = MOngoose ResT</h1>
+<h2 id="gist">Gist</h2><p><strong>Mortimer</strong> is an extendible REST interface for mongoose models, designed for the entire project lifecycle: from fast prototyping to advanced custom functionality.</p><h2 id="status">Status</h2><p><a href="https://nodei.co/npm/mortimer/"><img src="https://nodei.co/npm/mortimer.png?downloads=true&amp;stars=true" alt="NPM"></a></p><p><a href="https://nodei.co/npm-dl/mortimer/"><img src="https://nodei.co/npm-dl/mortimer.png?months=12" alt="NPM"></a></p><table>
+<thead>
+<tr>
+<th style="text-align:left">Indicator</th>
+<th style="text-align:left"></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">documentation</td>
+<td style="text-align:left"><a href="http://coffeedoc.info/github/topliceanu/mortimer/master/">hosted on coffedoc.info</a></td>
+</tr>
+<tr>
+<td style="text-align:left">continuous integration</td>
+<td style="text-align:left"><a href="https://travis-ci.org/topliceanu/mortimer"><img src="https://travis-ci.org/topliceanu/mortimer.svg?branch=master" alt="Build Status"></a></td>
+</tr>
+<tr>
+<td style="text-align:left">dependency management</td>
+<td style="text-align:left"><a href="https://david-dm.org/topliceanu/mortimer"><img src="https://david-dm.org/topliceanu/mortimer.svg?style=flat" alt="Dependency Status"></a> <a href="https://david-dm.org/topliceanu/mortimer#info=devDependencies"><img src="https://david-dm.org/topliceanu/mortimer/dev-status.svg?style=flat" alt="devDependency Status"></a></td>
+</tr>
+<tr>
+<td style="text-align:left">code coverage</td>
+<td style="text-align:left"><a href="https://coveralls.io/r/topliceanu/mortimer?branch=master"><img src="https://coveralls.io/repos/topliceanu/mortimer/badge.svg?branch=master" alt="Coverage Status"></a></td>
+</tr>
+<tr>
+<td style="text-align:left">examples</td>
+<td style="text-align:left"><a href="https://github.com/topliceanu/mortimer/tree/master/examples">/examples</a></td>
+</tr>
+<tr>
+<td style="text-align:left">development management</td>
+<td style="text-align:left"><a href="http://waffle.io/topliceanu/mortimer"><img src="https://badge.waffle.io/topliceanu/mortimer.svg?label=ready&amp;title=Ready" alt="Stories in Ready"></a></td>
+</tr>
+<tr>
+<td style="text-align:left">change log</td>
+<td style="text-align:left"><a href="https://github.com/topliceanu/mortimer/blob/master/CHANGELOG.md">CHANGELOG</a> <a href="https://github.com/topliceanu/mortimer/releases">Releases</a></td>
+</tr>
+</tbody>
+</table>
+<h2 id="features">Features</h2>
+<ul>
+<li>Focus on extensibility. Fully plugable!</li>
+<li>Does not depend on mongoose or express packages. It just builds arrays of middleware functions.</li>
+<li>Easy to bootstrap a basic REST API for your models.</li>
+<li>Supports filtering, pagination, sorting, property selection.</li>
+</ul>
+<h2 id="install">Install</h2>
+<pre><code class="lang-shell">npm install mortimer
+</code></pre>
+<h2 id="quick-example">Quick Example</h2>
+<pre><code class="lang-javascript">var bodyParser = require(&#39;body-parser&#39;);
+var express = require(&#39;express&#39;);
+var mongoose = require(&#39;mongoose&#39;);
+var mortimer = require(&#39;mortimer&#39;);
+
+
+// Handle connection to mongodb and data modeling.
+mongoose.connect(&#39;mongodb://localhost:27017/examples&#39;);
+
+var BookSchema = new mongoose.Schema({
+    &#39;title&#39;: {type: String},
+    &#39;author&#39;: {type: String}
+});
+
+var Book = mongoose.model(&#39;Book&#39;, BookSchema);
+
+
+// Setup http server with express.
+var app = express();
+app.set(&#39;query parser&#39;, &#39;simple&#39;);
+app.use(bodyParser.json());
+
+
+// Setup mortimer endpoints.
+var resource = new mortimer.Resource(Book);
+app.post(&#39;/books&#39;, resource.createDoc());
+app.get(&#39;/books&#39;, resource.readDocs());
+app.get(&#39;/books/count&#39;, resource.countDocs());
+app.patch(&#39;/books&#39;, resource.patchDocs());
+app.delete(&#39;/books&#39;, resource.removeDocs());
+app.get(&#39;/books/:bookId&#39;, resource.readDoc());
+app.patch(&#39;/books/:bookId&#39;, resource.patchDoc());
+app.put(&#39;/books/:bookId&#39;, resource.putDoc());
+app.delete(&#39;/books/:bookId&#39;, resource.removeDoc());
+
+
+// Start the http server on http://localhost:3000/
+app.listen(3000, &#39;localhost&#39;);
+</code></pre>
+<h2 id="more-examples">More Examples</h2><p>See more in the <code>/examples</code> directory. All examples have instructions on <strong>how to run and test them</strong>.</p><ul>
+<li>if you want to quickly bootstrap a rest api, check out <a href="https://github.com/topliceanu/mortimer/blob/master/examples/quick-bootstrap.js">this example</a>. You can rapidly define your own routes and let mortimer handle the requests.</li>
+<li>if you want to add middleware in front of every endpoint, check out <a href="https://github.com/topliceanu/mortimer/blob/master/examples/add-auth-to-create-endpoint.js">this example</a>. This can be usefull to add authentication, rate limiting, payload validation, output sanitation, etc. Mortimer is a backbone for all that.</li>
+<li>if you want to add custom functionality to just one middleware, check out <a href="https://github.com/topliceanu/mortimer/blob/master/examples/extend-existing-middleware-functionality.js">this example</a></li>
+</ul>
+<h2 id="contributing">Contributing</h2>
+<ol>
+<li>Contributions to this project are more than welcomed!<ul>
+<li>Anything from improving docs, code cleanup to advanced functionality is greatly appreciated.</li>
+<li>Before you start working on an ideea, please open an issue and describe in detail what you want to do and <strong>why it&#39;s important</strong>.</li>
+<li>You will get an answer in max 12h depending on your timezone.</li>
+</ul>
+</li>
+<li>Fork the repo!</li>
+<li>If you use <a href="https://www.vagrantup.com/">vagrant</a> then simply clone the repo into a folder then issue <code>$ vagrant up</code><ul>
+<li>if you don&#39;t use it, please consider learning it, it&#39;s easy to install and to get started with.</li>
+<li>If you don&#39;t use it, then you have to:<ul>
+<li>install mongodb and have it running on <code>localhost:27017</code>.</li>
+<li>install node.js and all node packages required in development using <code>$ npm install</code></li>
+<li>For reference, see <code>./vagrant_boostrap.sh</code> for instructions on how to setup all dependencies on a fresh ubuntu 14.04 machine.</li>
+</ul>
+</li>
+<li>Run the tests to make sure you have a correct setup: <code>$ npm run test</code></li>
+</ul>
+</li>
+<li>Create a new branch and implement your feature.<ul>
+<li>make sure you add tests for your feature. In the end <strong>all tests have to pass</strong>! To run test suite <code>$ npm run test</code>.</li>
+<li>make sure test coverage does not decrease. Run <code>$ npm run coverage</code> to open a browser window with the coverage report.</li>
+<li>make sure you document your code and generated code looks ok. Run <code>$ npm run doc</code> to re-generate the documentation.</li>
+<li>make sure code is linted (and tests too). Run <code>$ npm run lint</code></li>
+<li>submit a pull request with your code.</li>
+<li>hit me up for a code review!</li>
+</ul>
+</li>
+<li>Have my kindest thanks for making this project better!</li>
+</ol>
+<h2 id="licence">Licence</h2><p>(The MIT License)</p><p>Copyright (c) 2012 Alexandru Topliceanu (alexandru.topliceanu@gmail.com)</p><p>Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+&#39;Software&#39;), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:</p><p>The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.</p><p>THE SOFTWARE IS PROVIDED &#39;AS IS&#39;, WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+      </div>
+    </div>
+    <div id='footer'>
+  January 19, 15 11:25:00 by
+  <a href='https://github.com/coffeedoc/codo' title='CoffeeScript API documentation generator'>
+    Codo
+  </a>
+  2.0.9
+  &#10034;
+  Press H to see the keyboard shortcuts
+  &#10034;
+  <a href='http://twitter.com/netzpirat' target='_parent'>@netzpirat</a>
+  &#10034;
+  <a href='http://twitter.com/_inossidabile' target='_parent'>@_inossidabile</a>
+</div>
+<iframe id='search_frame'></iframe>
+<div id='fuzzySearch'>
+  <input type='text'>
+  <ol></ol>
+</div>
+<div id='help'>
+  <p>
+    Quickly fuzzy find classes, mixins, methods, file:
+  </p>
+  <ul>
+    <li>
+      <span>T</span>
+      Open fuzzy finder dialog
+    </li>
+  </ul>
+  <p>
+    Control the navigation frame:
+  </p>
+  <ul>
+    <li>
+      <span>L</span>
+      Toggle list view
+    </li>
+    <li>
+      <span>C</span>
+      Show class list
+    </li>
+    <li>
+      <span>I</span>
+      Show mixin list
+    </li>
+    <li>
+      <span>F</span>
+      Show file list
+    </li>
+    <li>
+      <span>M</span>
+      Show method list
+    </li>
+    <li>
+      <span>E</span>
+      Show extras list
+    </li>
+  </ul>
+  <p>
+    You can focus and blur the search input:
+  </p>
+  <ul>
+    <li>
+      <span>S</span>
+      Focus search input
+    </li>
+    <li>
+      <span>Esc</span>
+      Blur search input
+    </li>
+  </ul>
+</div>
+  </body>
+</html>

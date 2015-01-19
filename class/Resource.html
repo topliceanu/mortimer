@@ -1,0 +1,1866 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset='UTF-8'>
+  <title>mortimer docs</title>
+  <script src='../javascript/application.js'></script>
+  <script src='../javascript/search.js'></script>
+  <link rel='stylesheet' href='../stylesheets/application.css' type='text/css'>
+</head>
+  <body>
+    <div id='base' data-path='../'></div>
+<div id='header'>
+  <div id='menu'>
+    <a href='../extra/README.md.html' title='mortimer'>
+      mortimer
+    </a>
+    &raquo;
+    <a href='../alphabetical_index.html' title='Index'>
+      Index
+    </a>
+    &raquo;
+    <span class='title'>Resource</span>
+  </div>
+</div>
+    <div id='content'>
+      <h1>
+        Class:
+        Resource
+      </h1>
+      <table class='box'>
+        <tr>
+          <td>Defined in:</td>
+          <td>src&#47;Resource.coffee</td>
+        </tr>
+      </table>
+      <h2>Overview</h2>
+      <div class='docstring'>
+  <p>Base class for all Resources.</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      How to quickly generate rest endpoint for your mongoose model.
+    </h4>
+    <pre><code class='coffeescript'>&#47;&#47; ...
+var bookResource = new Resource(BookModel);
+&#47;&#47; ...
+app.get(&#39;&#47;books&#39;, bookResource.readDocs())
+app.post(&#39;&#47;books&#39;, bookResource.createDoc())
+app.delete(&#39;&#47;books&#39;, bookResource.removeDocs())
+app.get(&#39;&#47;books&#47;:bookId&#39;, bookResource.readDoc())
+app.patch(&#39;&#47;books&#47;:bookId&#39;, bookResource.patchDoc())
+app.put(&#39;&#47;books&#47;:bookId&#39;, bookResource.putDoc())
+app.delete(&#39;&#47;books&#47;:bookId&#39;, bookResource.removeDoc())
+&#47;&#47; ...</code></pre>
+  </div>
+</div>
+<div class='tags'>
+</div>
+      <h2>Instance Method Summary</h2>
+      <ul class='summary'>
+  <li>
+    <span class='signature'>
+      <a href='#createDoc-dynamic'>
+        #
+(Array&lt;Function&gt;)
+<b>createDoc</b><span>(options = {})</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Middleware stack which creates a new document. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#readDoc-dynamic'>
+        #
+(Array&lt;Function&gt;)
+<b>readDoc</b><span>(options = {})</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Middleware stack which reads a document by it&#39;s id. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#patchDoc-dynamic'>
+        #
+(Array&lt;Function&gt;)
+<b>patchDoc</b><span>(options = {})</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Middleware stack which updates a document by the provided id. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#putDoc-dynamic'>
+        #
+(void)
+<b>putDoc</b><span>(options = {})</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Middleware stack which replaces existing resource with the provided request body.
+
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#removeDoc-dynamic'>
+        #
+(Array&lt;Function&gt;)
+<b>removeDoc</b><span>(options = {})</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Middleware stack which removes a document specified by id. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#readDocs-dynamic'>
+        #
+(Array&lt;Function&gt;)
+<b>readDocs</b><span>(options = {})</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Middleware stack which returns a list of documents from the database. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#patchDocs-dynamic'>
+        #
+(Array&lt;Function&gt;)
+<b>patchDocs</b><span>(options = {})</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Middleware stack which patches all documents selected by the query params. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#removeDocs-dynamic'>
+        #
+(Array&lt;Function&gt;)
+<b>removeDocs</b><span>(options = {})</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Middleware stack which removes all documents matched by the query filters. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#countDocs-dynamic'>
+        #
+(Array&lt;Function&gt;)
+<b>countDocs</b><span>(options = {})</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Middleware stack which returns the number of documents in a collection. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#namespace-dynamic'>
+        #
+(Function)
+<b>namespace</b><span>(options)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Returns a middleware which sets a namespace object on the http.Request instance built by express.
+
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#read-dynamic'>
+        #
+(Function)
+<b>read</b><span>(options = {})</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Middleware start the mongoose.Query object for fetching a model from the database.
+
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#create-dynamic'>
+        #
+(Function)
+<b>create</b><span>(options = {})</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Middleware creates a document of the current model type from the request json payload.
+
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#patch-dynamic'>
+        #
+(Function)
+<b>patch</b><span>(options = {})</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Middleware updates one record in the database by it&#39;s id. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#put-dynamic'>
+        #
+(Function)
+<b>put</b><span>(options = {})</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Middleware replaces a document with the provided body. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#remove-dynamic'>
+        #
+(Function)
+<b>remove</b><span>(options = {})</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Middleware removes the specified document from the db if it belongs to the current shop.
+
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#readAll-dynamic'>
+        #
+(Function)
+<b>readAll</b><span>(options = {})</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Middleware creates a mongoose.Query instance that fetches all models from the database.
+
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#patchAll-dynamic'>
+        #
+(Function)
+<b>patchAll</b><span>(options = {})</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Middleware adds an update clause to query being constructed then executes it.
+
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#removeAll-dynamic'>
+        #
+(Function)
+<b>removeAll</b><span>(options = {})</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Middleware to remove all documents selected previously. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#updateAll-dynamic'>
+        #
+(void)
+<b>updateAll</b><span>(options = {})</span>
+      </a>
+    </span>
+    <span class='desc'>
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#countAll-dynamic'>
+        #
+(Function)
+<b>countAll</b><span>(options = {})</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Middleware counts the number of items currently selected. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#execute-dynamic'>
+        #
+(Function)
+<b>execute</b><span>(options = {})</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Executes the current built query. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#publish-dynamic'>
+        #
+(Function)
+<b>publish</b><span>(options = {})</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Middleware prints the results of a previously executed Query. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#fields-dynamic'>
+        #
+(Function)
+<b>fields</b><span>(options = {})</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Middleware modifies the current query object to only fetch specified fields
+
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#pagination-dynamic'>
+        #
+(Function)
+<b>pagination</b><span>(options = {})</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Middleware applies pagination parameter to the current query. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#filters-dynamic'>
+        #
+(Function)
+<b>filters</b><span>(options = {})</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Middleware filters the results of the current query, with the params from the request url query string.
+
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#sort-dynamic'>
+        #
+(Function)
+<b>sort</b><span>(options = {})</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Middleware sorts the result set by the given _sort field. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#log-dynamic'>
+        #
+(void)
+<b>log</b><span>(level, message, context...)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Utility to log events to from the module. 
+    </span>
+  </li>
+  <li>
+    <span class='signature'>
+      <a href='#format-dynamic'>
+        #
+(Function)
+<b>format</b><span>(results)</span>
+      </a>
+    </span>
+    <span class='desc'>
+      Format the database results. 
+    </span>
+  </li>
+</ul>
+      <h2>Constructor Details</h2>
+      <div class='methods'>
+  <div class='method_details'>
+    <p class='signature' id='constructor-dynamic'>
+      #
+(void)
+<b>constructor</b><span>(Model, options = {})</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Builds a new Resource instance given a mongoose.Model class.</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>Model</span>
+      <span class='type'>
+        (
+          <tt>Object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>instance of mongoose.Model </span>
+    </li>
+    <li>
+      <span class='name'>options</span>
+      <span class='type'>
+        (
+          <tt>Object</tt>
+        )
+      </span>
+    </li>
+  </ul>
+  <h3>
+    Options Hash:
+    (options):
+  </h3>
+  <ul class='options'>
+    <li>
+      <span class='name'>modelName</span>
+      <span class='type'>
+        (
+          <tt>String</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>useful for composing the modelKey </span>
+    </li>
+    <li>
+      <span class='name'>modelKey</span>
+      <span class='type'>
+        (
+          <tt>String</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>useful for identifying model id in routes </span>
+    </li>
+    <li>
+      <span class='name'>defaultPageSize</span>
+      <span class='type'>
+        (
+          <tt>Number</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>pagination default page size </span>
+    </li>
+    <li>
+      <span class='name'>namespace</span>
+      <span class='type'>
+        (
+          <tt>String</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>placeholder for custom data and methods. </span>
+    </li>
+  </ul>
+</div>
+  </div>
+</div>
+      <h2>Instance Method Details</h2>
+      <div class='methods'>
+  <div class='method_details'>
+    <p class='signature' id='createDoc-dynamic'>
+      #
+(Array&lt;Function&gt;)
+<b>createDoc</b><span>(options = {})</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Middleware stack which creates a new document.</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      Bind this middleware to an express endpoint.
+    </h4>
+    <pre><code class='coffeescript'>var bookResource = new Resource(BookModel);
+&#47;&#47; ...
+app.post(&#39;&#47;books&#39;, bookResource.createDoc());</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>options</span>
+      <span class='type'>
+        (
+          <tt>Object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>pass options to middleware stack </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>Array&lt;Function&gt;</tt>
+      )
+      &mdash;
+      <span class='desc'>list of express compatible middleware functions. </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='readDoc-dynamic'>
+      #
+(Array&lt;Function&gt;)
+<b>readDoc</b><span>(options = {})</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Middleware stack which reads a document by it&#39;s id.</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      Bind this middleware to an express endpoint.
+    </h4>
+    <pre><code class='coffeescript'>var bookResource = new Resource(BookModel);
+&#47;&#47; ...
+app.get(&#39;&#47;books&#47;:bookId&#39;, bookResource.readDoc());</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>options</span>
+      <span class='type'>
+        (
+          <tt>Object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>pass options to middleware stack </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>Array&lt;Function&gt;</tt>
+      )
+      &mdash;
+      <span class='desc'>list of express compatible middleware functions. </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='patchDoc-dynamic'>
+      #
+(Array&lt;Function&gt;)
+<b>patchDoc</b><span>(options = {})</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Middleware stack which updates a document by the provided id.</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      Bind this middleware to an express endpoint.
+    </h4>
+    <pre><code class='coffeescript'>var bookResource = new Resource(BookModel);
+&#47;&#47; ...
+app.patch(&#39;&#47;books&#47;:bookId&#39;, bookResource.patchDoc());</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>options</span>
+      <span class='type'>
+        (
+          <tt>Object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>pass options to middleware stack </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>Array&lt;Function&gt;</tt>
+      )
+      &mdash;
+      <span class='desc'>list of express compatible middleware functions. </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='putDoc-dynamic'>
+      #
+(void)
+<b>putDoc</b><span>(options = {})</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Middleware stack which replaces existing resource with the provided
+request body.</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      Bind this middleware to an express endpoint.
+    </h4>
+    <pre><code class='coffeescript'>var bookResource = new Resource(BookModel);
+&#47;&#47; ...
+app.put(&#39;&#47;books&#47;:bookId&#39;, bookResource.putDoc());</code></pre>
+  </div>
+</div>
+<div class='tags'>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='removeDoc-dynamic'>
+      #
+(Array&lt;Function&gt;)
+<b>removeDoc</b><span>(options = {})</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Middleware stack which removes a document specified by id.</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      Bind this middleware to an express endpoint.
+    </h4>
+    <pre><code class='coffeescript'>var bookResource = new Resource(BookModel);
+&#47;&#47; ...
+app.delete(&#39;&#47;books&#47;:bookId&#39;, bookResource.removeDoc());</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>options</span>
+      <span class='type'>
+        (
+          <tt>Object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>pass options to middleware stack </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>Array&lt;Function&gt;</tt>
+      )
+      &mdash;
+      <span class='desc'>list of express compatible middleware functions. </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='readDocs-dynamic'>
+      #
+(Array&lt;Function&gt;)
+<b>readDocs</b><span>(options = {})</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Middleware stack which returns a list of documents from the database.
+It supports advanced filtering, pagination, sorting, field selection, etc.</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      Bind this middleware to an express endpoint.
+    </h4>
+    <pre><code class='coffeescript'>var bookResource = new Resource(BookModel);
+&#47;&#47; ...
+app.get(&#39;&#47;books&#39;, bookResource.readDocs());</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>options</span>
+      <span class='type'>
+        (
+          <tt>Object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>pass options to middleware stack </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>Array&lt;Function&gt;</tt>
+      )
+      &mdash;
+      <span class='desc'>list of express compatible middleware functions. </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='patchDocs-dynamic'>
+      #
+(Array&lt;Function&gt;)
+<b>patchDocs</b><span>(options = {})</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Middleware stack which patches all documents selected by the query params.
+This endpoint does not return the modified documents.
+For that you will need to perform another request.</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      Bind this middleware to an express endpoint.
+    </h4>
+    <pre><code class='coffeescript'>var bookResource = new Resource(BookModel);
+&#47;&#47; ...
+app.patch(&#39;&#47;books&#39;, bookResource.patchDocs());</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>options</span>
+      <span class='type'>
+        (
+          <tt>Object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>pass options to middleware stack </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>Array&lt;Function&gt;</tt>
+      )
+      &mdash;
+      <span class='desc'>list of express compatible middleware functions. </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='removeDocs-dynamic'>
+      #
+(Array&lt;Function&gt;)
+<b>removeDocs</b><span>(options = {})</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Middleware stack which removes all documents matched by the query filters.</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      Bind this middleware to an express endpoint.
+    </h4>
+    <pre><code class='coffeescript'>var bookResource = new Resource(BookModel);
+&#47;&#47; ...
+app.delete(&#39;&#47;books&#39;, bookResource.removeDocs());</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>options</span>
+      <span class='type'>
+        (
+          <tt>Object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>pass options to middleware stack </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>Array&lt;Function&gt;</tt>
+      )
+      &mdash;
+      <span class='desc'>list of express compatible middleware functions. </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='countDocs-dynamic'>
+      #
+(Array&lt;Function&gt;)
+<b>countDocs</b><span>(options = {})</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Middleware stack which returns the number of documents in a collection.
+It supports counting after filtering the collection.</p><p>This endpoint is separate from readDocs because of performance issues,
+mongo does not return a count of all documents when using skip, limit.</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      Bind this middleware to an express endpoint.
+    </h4>
+    <pre><code class='coffeescript'>var bookResource = new Resource(BookModel);
+&#47;&#47; ...
+app.get(&#39;&#47;books&#47;count&#39;, bookResource.countDocs());</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>options</span>
+      <span class='type'>
+        (
+          <tt>Object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>pass options to middleware stack </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>Array&lt;Function&gt;</tt>
+      )
+      &mdash;
+      <span class='desc'>list of express compatible middleware functions. </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='namespace-dynamic'>
+      #
+(Function)
+<b>namespace</b><span>(options)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Returns a middleware which sets a namespace object on the http.Request
+instance built by express. It is used to attach data and custom functions.</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>options</span>
+      <span class='type'>
+        (
+          <tt>Object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>pass options to middleware stack </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>Function</tt>
+      )
+      &mdash;
+      <span class='desc'>express compatible middleware function. </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='read-dynamic'>
+      #
+(Function)
+<b>read</b><span>(options = {})</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Middleware start the mongoose.Query object for fetching a
+model from the database.</p><pre><code>                               that will fetch the data from Mongo.
+</code></pre>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>req.params.&lt;modelName&gt;Id</span>
+      <span class='type'>
+        (
+          <tt>String</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>id of model to be returned </span>
+    </li>
+    <li>
+      <span class='name'>req.&lt;ns&gt;.query</span>
+      <span class='type'>
+        (
+          <tt>mongoose.Query</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>the mongoose.Query instance </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>Function</tt>
+      )
+      &mdash;
+      <span class='desc'>middleware function </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='create-dynamic'>
+      #
+(Function)
+<b>create</b><span>(options = {})</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Middleware creates a document of the current model type
+from the request json payload. It also publishes the
+newly created document.</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>req.body</span>
+      <span class='type'>
+        (
+          <tt>Object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>the request payload object to be wrapped. </span>
+    </li>
+    <li>
+      <span class='name'>req.&lt;ns&gt;.result</span>
+      <span class='type'>
+        (
+          <tt>mongose.Model</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>newly created instance of model. </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>Function</tt>
+      )
+      &mdash;
+      <span class='desc'>middleware function </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='patch-dynamic'>
+      #
+(Function)
+<b>patch</b><span>(options = {})</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Middleware updates one record in the database by it&#39;s id.
+If a record isn&#39;t found an error is thrown.</p><pre><code>                     existing model record.
+</code></pre>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>req.body</span>
+      <span class='type'>
+        (
+          <tt>Object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>the request payload to be added over the </span>
+    </li>
+    <li>
+      <span class='name'>req.&lt;ns&gt;.result</span>
+      <span class='type'>
+        (
+          <tt>mongoose.Model</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>instance of the Mode to be updated. </span>
+    </li>
+    <li>
+      <span class='name'>req.&lt;ns&gt;.result</span>
+      <span class='type'>
+        (
+          <tt>Mixed</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>instance of the Model that was just updated. </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>Function</tt>
+      )
+      &mdash;
+      <span class='desc'>middleware function </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='put-dynamic'>
+      #
+(Function)
+<b>put</b><span>(options = {})</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Middleware replaces a document with the provided body.</p><p>Because no better way is available in mongoose, this middleware will
+remove the existing document the insert it again with the new data.
+Please note that this endpoint is not thread safe.</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>req.&lt;ns&gt;.result</span>
+      <span class='type'>
+        (
+          <tt>Object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>instance of current Model to be replaced. </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>Function</tt>
+      )
+      &mdash;
+      <span class='desc'>middleware function </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='remove-dynamic'>
+      #
+(Function)
+<b>remove</b><span>(options = {})</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Middleware removes the specified document from the db if it
+belongs to the current shop.</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>req.params.modelId</span>
+      <span class='type'>
+        (
+          <tt>String</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>id of model to be updated </span>
+    </li>
+    <li>
+      <span class='name'>req.&lt;ns&gt;.result</span>
+      <span class='type'>
+        (
+          <tt>Object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>instance of current Model that was removed </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>Function</tt>
+      )
+      &mdash;
+      <span class='desc'>middleware function </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='readAll-dynamic'>
+      #
+(Function)
+<b>readAll</b><span>(options = {})</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Middleware creates a mongoose.Query instance that fetches all
+models from the database.</p><pre><code>                                    fetch models from database.
+</code></pre>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>req.&lt;ns&gt;.query</span>
+      <span class='type'>
+        (
+          <tt>mongoose.Query</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>instance of mongoose.Query to </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>Function</tt>
+      )
+      &mdash;
+      <span class='desc'>middleware function </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='patchAll-dynamic'>
+      #
+(Function)
+<b>patchAll</b><span>(options = {})</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Middleware adds an update clause to query being constructed then executes
+it. This way it updates all documents selected by the query.</p><pre><code>                                   fetch models from database.
+</code></pre>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>req.body</span>
+      <span class='type'>
+        (
+          <tt>Object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>payload to overwrite data on selected documents. </span>
+    </li>
+    <li>
+      <span class='name'>req.&lt;ns&gt;.query</span>
+      <span class='type'>
+        (
+          <tt>mongoose.Query</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>instance of mongoose.Query to </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>Function</tt>
+      )
+      &mdash;
+      <span class='desc'>middleware function </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='removeAll-dynamic'>
+      #
+(Function)
+<b>removeAll</b><span>(options = {})</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Middleware to remove all documents selected previously.</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>req.&lt;ns&gt;.result</span>
+      <span class='type'>
+        (
+          <tt>Number|Object|Array&lt;Object&gt;</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>query result. </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>Function</tt>
+      )
+      &mdash;
+      <span class='desc'>middleware function </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='updateAll-dynamic'>
+      #
+(void)
+<b>updateAll</b><span>(options = {})</span>
+      <br>
+    </p>
+    
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='countAll-dynamic'>
+      #
+(Function)
+<b>countAll</b><span>(options = {})</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Middleware counts the number of items currently selected.</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>req.&lt;ns&gt;.result</span>
+      <span class='type'>
+        (
+          <tt>Number</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>the result of the count query. </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>Function</tt>
+      )
+      &mdash;
+      <span class='desc'>middleware function </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='execute-dynamic'>
+      #
+(Function)
+<b>execute</b><span>(options = {})</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Executes the current built query. It will set the the
+results in req.<ns>.result or return an error message if
+something goes wrong.</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>req.&lt;ns&gt;.query</span>
+      <span class='type'>
+        (
+          <tt>mongoose.Query</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>query for mongodb. </span>
+    </li>
+    <li>
+      <span class='name'>req.&lt;ns&gt;.result</span>
+      <span class='type'>
+        (
+          <tt>Number|Object|Array&lt;Object&gt;</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>query result. </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>Function</tt>
+      )
+      &mdash;
+      <span class='desc'>middleware function </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='publish-dynamic'>
+      #
+(Function)
+<b>publish</b><span>(options = {})</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Middleware prints the results of a previously executed Query.</p><pre><code>                            instance, it&#39;s either a Document
+                            or an array of Documents.
+</code></pre>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>req.&lt;ns&gt;.result</span>
+      <span class='type'>
+        (
+          <tt>Object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>results from mongoose.Query </span>
+    </li>
+    <li>
+      <span class='name'>options</span>
+      <span class='type'>
+        (
+          <tt>Object</tt>
+        )
+      </span>
+    </li>
+    <li>
+      <span class='name'>options</span>
+      <span class='type'>
+        (
+          <tt>Number</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>statusCode status code  returned to the client. </span>
+    </li>
+    <li>
+      <span class='name'>options</span>
+      <span class='type'>
+        (
+          <tt>Boolean</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>empty - if the response payload should be empty. </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>Function</tt>
+      )
+      &mdash;
+      <span class='desc'>middleware function </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='fields-dynamic'>
+      #
+(Function)
+<b>fields</b><span>(options = {})</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Middleware modifies the current query object to only fetch
+specified fields</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      Have the endpoint return only a subset of the data in docs.
+    </h4>
+    <pre><code class='coffeescript'>request.get(&#39;&#47;books?_fields=author,title&#39;)</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>req.query._fields</span>
+      <span class='type'>
+        (
+          <tt>String</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>list of coma separated field keys </span>
+    </li>
+    <li>
+      <span class='name'>req.&lt;ns&gt;.query</span>
+      <span class='type'>
+        (
+          <tt>mongoose.Query</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>fetches the data from Mongo. </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>Function</tt>
+      )
+      &mdash;
+      <span class='desc'>middleware function </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='pagination-dynamic'>
+      #
+(Function)
+<b>pagination</b><span>(options = {})</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Middleware applies pagination parameter to the current query.</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      Have the endpoint return a slice of the collection
+    </h4>
+    <pre><code class='coffeescript'>request.get(&#39;&#47;books?_skip=100&amp;_limit=200&#39;)</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>req.query._skip</span>
+      <span class='type'>
+        (
+          <tt>Number</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>where to start fetching the result set. </span>
+    </li>
+    <li>
+      <span class='name'>req.query._limit</span>
+      <span class='type'>
+        (
+          <tt>Number</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>how many records to return </span>
+    </li>
+    <li>
+      <span class='name'>req.&lt;ns&gt;.query</span>
+      <span class='type'>
+        (
+          <tt>mongoose.Query</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>fetch models from database. </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>Function</tt>
+      )
+      &mdash;
+      <span class='desc'>middleware function </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='filters-dynamic'>
+      #
+(Function)
+<b>filters</b><span>(options = {})</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Middleware filters the results of the current query, with
+the params from the request url query string.</p><p>It will ignore the reserved query params attached to the class.</p><p>This middleware supports multiple operators matching those in mongo:
+ eq, ne, lt, lte, gt, gte, regex, etc.</p>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      How to find all books named Hamlet
+    </h4>
+    <pre><code class='coffeescript'>request.get(&#39;&#47;books?title__eq=Hamlet&#39;)</code></pre>
+    <h4>
+      How to find all books with more than 1000 pages
+    </h4>
+    <pre><code class='coffeescript'>request.get(&#39;&#47;books?numPages__gte=1000&#39;)</code></pre>
+    <h4>
+      How to find all books written in russian, between 1800 and 1900
+    </h4>
+    <pre><code class='coffeescript'>request.get(&#39;&#47;books?lang=ru&amp;writtenIn__gte=1800&amp;writtenIn__lte=1900&#39;)</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>req.query</span>
+      <span class='type'>
+        (
+          <tt>Object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>query string params acting as filters </span>
+    </li>
+    <li>
+      <span class='name'>req.&lt;ns&gt;.query</span>
+      <span class='type'>
+        (
+          <tt>mongoose.Query</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>fetches models from database. </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>Function</tt>
+      )
+      &mdash;
+      <span class='desc'>middleware function </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='sort-dynamic'>
+      #
+(Function)
+<b>sort</b><span>(options = {})</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Middleware sorts the result set by the given _sort field.</p><p>The _sort value is a field name of the current model by
+which the sort will be performed.</p><p>In addition the field name can be prefixed with <code>-</code> to
+indicate sorting in descending order.</p><pre><code>                            Eg `&amp;_sort=-createdOn`
+                           fetch models from database.
+</code></pre>
+  <div class='examples'>
+    <h3>Examples:</h3>
+    <h4>
+      Retrieve all books sorted by title descending.
+    </h4>
+    <pre><code class='coffeescript'>request.get(&#39;&#47;books?_sort=-title&#39;)</code></pre>
+  </div>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>req.query</span>
+      <span class='type'>
+        (
+          <tt>Object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>dict with url query string params. </span>
+    </li>
+    <li>
+      <span class='name'>req.query._sort</span>
+      <span class='type'>
+        (
+          <tt>String</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>the field/order to sort by. </span>
+    </li>
+    <li>
+      <span class='name'>req.&lt;ns&gt;.query</span>
+      <span class='type'>
+        (
+          <tt>Object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>instance of mongoose.Query to </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>Function</tt>
+      )
+      &mdash;
+      <span class='desc'>middleware function </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='log-dynamic'>
+      #
+(void)
+<b>log</b><span>(level, message, context...)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Utility to log events to from the module.
+Override this method to hook up your own loggin infrastructure.</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>level</span>
+      <span class='type'>
+        (
+          <tt>String</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>the logging level, one of debug, info, warn, error. </span>
+    </li>
+    <li>
+      <span class='name'>message</span>
+      <span class='type'>
+        (
+          <tt>String</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>log message </span>
+    </li>
+    <li>
+      <span class='name'>context</span>
+      <span class='type'>
+        (
+          <tt>Array&lt;Object&gt;</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>optional list of relevant objects </span>
+    </li>
+  </ul>
+</div>
+  </div>
+  <div class='method_details'>
+    <p class='signature' id='format-dynamic'>
+      #
+(Function)
+<b>format</b><span>(results)</span>
+      <br>
+    </p>
+    <div class='docstring'>
+  <p>Format the database results. By default, mongoose serializes the
+documents, but you should override this method for custom formatting.</p>
+</div>
+<div class='tags'>
+  <h3>Parameters:</h3>
+  <ul class='param'>
+    <li>
+      <span class='name'>results</span>
+      <span class='type'>
+        (
+          <tt>Object</tt>
+        )
+      </span>
+      &mdash;
+      <span class='desc'>depend on the resolved query. </span>
+    </li>
+  </ul>
+  <h3>Returns:</h3>
+  <ul class='return'>
+    <li>
+      <span class='type'></span>
+      (
+        <tt>Function</tt>
+      )
+      &mdash;
+      <span class='desc'>middleware function </span>
+    </li>
+  </ul>
+</div>
+  </div>
+</div>
+    </div>
+    <div id='footer'>
+  January 19, 15 11:25:00 by
+  <a href='https://github.com/coffeedoc/codo' title='CoffeeScript API documentation generator'>
+    Codo
+  </a>
+  2.0.9
+  &#10034;
+  Press H to see the keyboard shortcuts
+  &#10034;
+  <a href='http://twitter.com/netzpirat' target='_parent'>@netzpirat</a>
+  &#10034;
+  <a href='http://twitter.com/_inossidabile' target='_parent'>@_inossidabile</a>
+</div>
+<iframe id='search_frame'></iframe>
+<div id='fuzzySearch'>
+  <input type='text'>
+  <ol></ol>
+</div>
+<div id='help'>
+  <p>
+    Quickly fuzzy find classes, mixins, methods, file:
+  </p>
+  <ul>
+    <li>
+      <span>T</span>
+      Open fuzzy finder dialog
+    </li>
+  </ul>
+  <p>
+    Control the navigation frame:
+  </p>
+  <ul>
+    <li>
+      <span>L</span>
+      Toggle list view
+    </li>
+    <li>
+      <span>C</span>
+      Show class list
+    </li>
+    <li>
+      <span>I</span>
+      Show mixin list
+    </li>
+    <li>
+      <span>F</span>
+      Show file list
+    </li>
+    <li>
+      <span>M</span>
+      Show method list
+    </li>
+    <li>
+      <span>E</span>
+      Show extras list
+    </li>
+  </ul>
+  <p>
+    You can focus and blur the search input:
+  </p>
+  <ul>
+    <li>
+      <span>S</span>
+      Focus search input
+    </li>
+    <li>
+      <span>Esc</span>
+      Blur search input
+    </li>
+  </ul>
+</div>
+  </body>
+</html>
