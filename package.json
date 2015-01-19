@@ -52,9 +52,5 @@
   "engines": {
     "node": ">0.10.0"
   },
-  "config": {
-    "blanket": {
-      "pattern": "./src"
-    }
-  }
+  "config": {}
 }

@@ -12,8 +12,7 @@ logs
 results
 
 node_modules
-lib/
-doc/
+lib
+doc
 .vagrant
-coverage.html
 coverage
