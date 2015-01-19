@@ -165,7 +165,30 @@ class Resource
             @publish statusCode: 200
         ]
 
-    # Middleware stask which removes all documents matched by the query filters.
+    # Middleware stack which patches all documents selected by the query params.
+    # This endpoint does not return the modified documents.
+    # For that you will need to perform another request.
+    #
+    # @example Bind this middleware to an express endpoint.
+    #   var bookResource = new Resource(BookModel);
+    #   // ...
+    #   app.patch('/books', bookResource.patchDocs());
+    #
+    # @param {Object} options pass options to middleware stack
+    # @return {Array<Function>} list of express compatible middleware functions.
+    #
+    patchDocs: (options = {}) ->
+        [
+            @namespace()
+            @readAll()
+            @pagination()
+            @filters()
+            @sort()
+            @patchAll()
+            @publish statusCode: 200
+        ]
+
+    # Middleware stack which removes all documents matched by the query filters.
     #
     # @example Bind this middleware to an express endpoint.
     #   var bookResource = new Resource(BookModel);
@@ -182,7 +205,6 @@ class Resource
             @pagination()
             @filters()
             @sort()
-            @execute()
             @removeAll()
             @publish statusCode: 200, empty: true
         ]
@@ -210,7 +232,7 @@ class Resource
             @namespace()
             @readAll()
             @filters()
-            @count()
+            @countAll()
             @publish statusCode: 200
         ]
 
@@ -270,10 +292,10 @@ class Resource
     # Middleware updates one record in the database by it's id.
     # If a record isn't found an error is thrown.
     #
-    # @param req.body {Object} the request payload to be added over the
+    # @param {Object} req.body the request payload to be added over the
     #                          existing model record.
-    # @param req.<ns>.result {mongoose.Model} instance of the Mode to be updated.
-    # @param req.<ns>.result {Mixed} instance of the Model that was just updated.
+    # @param {mongoose.Model} req.<ns>.result instance of the Mode to be updated.
+    # @param {Mixed} req.<ns>.result instance of the Model that was just updated.
     # @return {Function} middleware function
     #
     patch: (options = {}) ->
@@ -293,7 +315,7 @@ class Resource
     # remove the existing document the insert it again with the new data.
     # Please note that this endpoint is not thread safe.
     #
-    # @param req.<ns>.result {Object} instance of current Model to be replaced.
+    # @param {Object} req.<ns>.result instance of current Model to be replaced.
     # @return {Function} middleware function
     #
     put: (options = {}) ->
@@ -316,8 +338,8 @@ class Resource
     # Middleware removes the specified document from the db if it
     # belongs to the current shop.
     #
-    # @param req.params.modelId {String} id of model to be updated
-    # @param req.<ns>.result {Object} instance of current Model that was removed
+    # @param {String} req.params.modelId id of model to be updated
+    # @param {Object} req.<ns>.result instance of current Model that was removed
     # @return {Function} middleware function
     #
     remove: (options = {}) ->
@@ -331,7 +353,7 @@ class Resource
     # Middleware creates a mongoose.Query instance that fetches all
     # models from the database.
     #
-    # @param req.<ns>.query {mongoose.Query} instance of mongoose.Query to
+    # @param {mongoose.Query} req.<ns>.query instance of mongoose.Query to
     #                                         fetch models from database.
     # @return {Function} middleware function
     #
@@ -340,6 +362,24 @@ class Resource
             req[@ns].query = @Model.find()
             next()
 
+    # Middleware adds an update clause to query being constructed then executes
+    # it. This way it updates all documents selected by the query.
+    #
+    # @param {Object} req.body payload to overwrite data on selected documents.
+    # @param {mongoose.Query} req.<ns>.query instance of mongoose.Query to
+    #                                        fetch models from database.
+    # @return {Function} middleware function
+    #
+    patchAll: (options = {}) ->
+        (req, res, next) =>
+            req[@ns].query.setOptions({multi: true})
+            req[@ns].query.update req.body, (error) ->
+                if error?
+                    return res.status(500).send
+                        msg: 'Unable to patch selected documents'
+                next()
+
+
     # Middleware to remove all documents selected previously.
     #
     # @param {Number|Object|Array<Object>} req.<ns>.result query result.
@@ -347,20 +387,20 @@ class Resource
     #
     removeAll: (options = {}) ->
         (req, res, next) =>
-            ids = _.pluck req[@ns].result, '_id'
-            @Model.where('_id').in(ids).remove (error) ->
+            req[@ns].query.remove (error, numDocsRemoved) =>
                 if error?
                     return res.status(500).send
                         msg: 'Failed to remove selected documents'
                 next()
 
+    updateAll: (options = {}) ->
 
     # Middleware counts the number of items currently selected.
     #
-    # @param req.<ns>.result {Number} the result of the count query.
+    # @param {Number} req.<ns>.result the result of the count query.
     # @return {Function} middleware function
     #
-    count: (options = {}) ->
+    countAll: (options = {}) ->
         (req, res, next) =>
             req[@ns].query.count (error, count) =>
                 if error?
@@ -421,8 +461,8 @@ class Resource
     # @example Have the endpoint return only a subset of the data in docs.
     #   request.get('/books?_fields=author,title')
     #
-    # @param req.query._fields {String} list of coma separated field keys
-    # @param req.<ns>.query {mongoose.Query} fetches the data from Mongo.
+    # @param {String} req.query._fields list of coma separated field keys
+    # @param {mongoose.Query} req.<ns>.query fetches the data from Mongo.
     # @return {Function} middleware function
     #
     fields: (options = {}) ->
@@ -438,10 +478,9 @@ class Resource
     # @example Have the endpoint return a slice of the collection
     #   request.get('/books?_skip=100&_limit=200')
     #
-    # @param req.query._skip {Number} where to start fetching the result set.
-    # @param req.query._limit {String} how many records to return
-    # @param req.<ns>.query {mongoose.Query} fetch models from database.
-    # @param req.<ns>.query {mongoose.Query} modifies query to paginate results.
+    # @param {Number} req.query._skip where to start fetching the result set.
+    # @param {Number} req.query._limit how many records to return
+    # @param {mongoose.Query} req.<ns>.query fetch models from database.
     # @return {Function} middleware function
     #
     pagination: (options = {}) ->
@@ -471,9 +510,8 @@ class Resource
     # @example How to find all books written in russian, between 1800 and 1900
     #   request.get('/books?lang=ru&writtenIn__gte=1800&writtenIn__lte=1900')
     #
-    # @param req.query {Object} query string params acting as filters
-    # @param req.<ns>.query {mongoose.Query} fetches models from database.
-    # @param req.<ns>.query {mongoose.Query} modifies query to filter results
+    # @param {Object} req.query query string params acting as filters
+    # @param {mongoose.Query} req.<ns>.query fetches models from database.
     # @return {Function} middleware function
     #
     filters: (options = {}) ->
@@ -531,9 +569,10 @@ class Resource
     # @example Retrieve all books sorted by title descending.
     #   request.get('/books?_sort=-title')
     #
-    # @param req.query {Object} dict with url query string params.
-    # @param req.query._sort {Object} the field/order to sort by.
-    # @param req.<ns>.query {Object} instance of mongoose.Query to
+    # @param {Object} req.query dict with url query string params.
+    # @param {String} req.query._sort the field/order to sort by.
+    #                                 Eg `&_sort=-createdOn`
+    # @param {Object} req.<ns>.query instance of mongoose.Query to
     #                                fetch models from database.
     # @return {Function} middleware function
     #
@@ -555,7 +594,7 @@ class Resource
     log: (level, message, context...) ->
         console.log level, message, context...
 
-    # Format the results from database. By default, mongoose serializes the
+    # Format the database results. By default, mongoose serializes the
     # documents, but you should override this method for custom formatting.
     #
     # @param {Object} results depend on the resolved query.
