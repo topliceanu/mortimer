@@ -25,10 +25,22 @@
  *  $ curl -XGET http://localhost:3000/books/54b8d3f6c9f63bce07386878
  *  $ {"meta":{},"data":{"_id":"54b8d3f6c9f63bce07386878","title":"Brothers Karamazov","author":"Feodor Dostoevsky","__v":0}}
  *
- *  $ curl -XPATCH http://localhost:3000/books/54b8d3f6c9f63bce07386878 -H 'Content-type: application/json' -d '{"author": "Fyodor Dostoevsky"}'
- *  $ {"meta":{},"data":{"_id":"54b8d3f6c9f63bce07386878","title":"Brothers Karamazov","author":"Fyodor Dostoevsky","__v":0}}
+ *  $ curl -XPOST http://localhost:3000/books -H 'Content-type: application/json' -d '{"title": "Crime and Punishment", "author": "Feodor Dostoevsky"}'
+ *  $ {"meta":{},"data":{"__v":0,"title":"Brothers Karamazov","author":"Feodor Dostoevsky","_id":"54b8d3f6c9f63bce07386124"}}
  *
- *  $ curl -XDELETE http://localhost:3000/books/54b8d3f6c9f63bce07386878
+ *  $ curl -XGET http://localhost:3000/books/count
+ *  $ {"meta":{},"data":2}
+ *
+ *  $ curl -XPATCH http://localhost:3000/books/54b8d3f6c9f63bce07386878 -H 'Content-type: application/json' -d '{"author": "Fyodor Dostoevsky"}'
+ *  $ {"meta":{},"data":{"_id":"54b8d3f6c9f63bce07386878","title":"Brothers Karamazov","author":"Fyodor Dostoevsky","__v":1}}
+ *
+ *  $ curl -XPUT http://localhost:3000/books/54b8d3f6c9f63bce07386124 -H 'Content-type: application/json' -d '{"author": "Fyodor Dostoevsky", "title": "Crime & Punishment"}'
+ *  $ {"meta":{},"data":{"_id":"54b8d3f6c9f63bce07386124","title":"Crime & Punishement","author":"Fyodor Dostoevsky","__v":0}}
+ *
+ *  $ curl -XPATCH http://localhost:3000/books -H 'Content-type: application/json' -d '{"author": "Greatest Russian Author Ever!"}'
+ *  $ {"meta":{}}
+ *
+ *  $ curl -XDELETE http://localhost:3000/books
  */
 
 
@@ -59,8 +71,12 @@ app.use(bodyParser.json());
 var resource = new mortimer.Resource(Book);
 app.post('/books', resource.createDoc());
 app.get('/books', resource.readDocs());
+app.get('/books/count', resource.countDocs());
+app.patch('/books', resource.patchDocs());
+app.delete('/books', resource.removeDocs());
 app.get('/books/:bookId', resource.readDoc());
 app.patch('/books/:bookId', resource.patchDoc());
+app.put('/books/:bookId', resource.putDoc());
 app.delete('/books/:bookId', resource.removeDoc());
 
 

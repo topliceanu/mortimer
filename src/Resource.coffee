@@ -218,7 +218,7 @@ class Resource
     # @example Bind this middleware to an express endpoint.
     #   var bookResource = new Resource(BookModel);
     #   // ...
-    #   app.get('/books/count', bookResource.countDoc());
+    #   app.get('/books/count', bookResource.countDocs());
     #
     # @param {Object} options pass options to middleware stack
     # @return {Array<Function>} list of express compatible middleware functions.

@@ -1,4 +1,15 @@
-### Changelog
+# Changelog
+
+## Version 1.1.0 - Jan 19, 2015
+* Implement `PUT /<resource>/:<resource>Id` to completely replace document.
+* Implement `PATCH /<resource>` to update a set of selected documents.
+* Implement `DELETE /<resource>` to remove a set of selected documents.
+* Improve documentation accross the board.
+* Update examples and README.md to showcase the new endpoints.
+
+## Version 1.0.1 - Jan 17, 2015
+* Patch error capturing and reporting by the api.
+* Improve methods documentation
 
 ## Version 1.0.0 - Jan 13, 2015
 * Bump major version! This version is no longer compatible with previous ones!
