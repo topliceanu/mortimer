@@ -112,7 +112,7 @@ See more in the `/examples` directory. All examples have instructions on __how t
 
 (The MIT License)
 
-Copyright (c) 2012 Alexandru Topliceanu (alexandru.topliceanu@gmail.com)
+Copyright (c) Alexandru Topliceanu (alexandru.topliceanu@gmail.com)
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

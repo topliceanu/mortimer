@@ -31,22 +31,22 @@
     "doc": "./node_modules/.bin/codo src"
   },
   "dependencies": {
-    "underscore": "1.7.0"
+    "underscore": "1.8.3"
   },
   "devDependencies": {
-    "body-parser": "1.10.1",
-    "chai": "1.10.0",
-    "codo": "2.0.9",
-    "coffee-coverage": "0.4.4",
-    "coffee-script": "1.8.0",
-    "coffeelint": "1.8.1",
-    "coveralls": "2.11.2",
-    "express": "4.10.7",
-    "mocha": "2.1.0",
-    "mocha-lcov-reporter": "0.0.1",
-    "mongoose": "3.8.21",
-    "q": "1.1.2",
-    "supertest": "0.15.0"
+    "body-parser": "1.14.2",
+    "chai": "3.4.1",
+    "codo": "2.0.11",
+    "coffee-coverage": "0.7.0",
+    "coffee-script": "1.10.0",
+    "coffeelint": "1.14.2",
+    "coveralls": "2.11.6",
+    "express": "4.13.3",
+    "mocha": "2.3.4",
+    "mocha-lcov-reporter": "1.0.0",
+    "mongoose": "4.3.4",
+    "q": "1.4.1",
+    "supertest": "1.1.0"
   },
   "optionalDependencies": {},
   "engines": {
