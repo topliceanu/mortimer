@@ -387,7 +387,7 @@ class Resource
     #
     removeAll: (options = {}) ->
         (req, res, next) =>
-            req[@ns].query.remove (error, numDocsRemoved) =>
+            req[@ns].query.remove (error, numDocsRemoved) ->
                 if error?
                     return res.status(500).send
                         msg: 'Failed to remove selected documents'
@@ -485,8 +485,8 @@ class Resource
     #
     pagination: (options = {}) ->
         (req, res, next) =>
-            skip = if req.query._skip? then req.query._skip else 0
-            limit = if req.query._limit? then req.query._limit \
+            skip = if req.query._skip? then +req.query._skip else 0
+            limit = if req.query._limit? then +req.query._limit \
                     else @defaultPageSize
 
             req[@ns].query.skip skip

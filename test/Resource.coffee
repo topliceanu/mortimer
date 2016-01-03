@@ -18,6 +18,7 @@ Resource = require '../src/Resource'
 serialize = (mongooseObject) ->
     JSON.parse JSON.stringify mongooseObject
 
+
 describe 'Resource', ->
 
     before ->
@@ -72,7 +73,7 @@ describe 'Resource', ->
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json')
                 .send(payload)
-            (Q.ninvoke call, 'end').then (res) ->
+            (Q.nfcall call.end.bind(call)).then (res) ->
                 assert.equal res.statusCode, 201,
                     'should succesfully create a new book'
                 assert.isDefined res.body.data._id,
@@ -83,16 +84,16 @@ describe 'Resource', ->
                     'should return the books author'
 
                 # Check in the database.
-                query = Book.findOne()
+                Book.findOne()
                     .where('title').equals(payload.title)
                     .where('author').equals(payload.author)
-                Q.ninvoke query, 'exec'
+                    .exec()
             .then (newBook) ->
                 assert.isNotNull newBook,
                     'should have stored the new book'
             .then (-> done()), done
 
-        it 'should not a new book because of bad input data', (done) ->
+        it 'should not add a new book because of bad input data', (done) ->
             payload =
                 name: 'book3'
                 writer: 'author1'
@@ -103,12 +104,12 @@ describe 'Resource', ->
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json')
                 .send(payload)
-            (Q.ninvoke call, 'end').then (res) ->
+            (Q.nfcall call.end.bind(call)).then (res) ->
                 assert.equal res.statusCode, 500,
                     'bad input data'
 
                 # Check in the database.
-                Q.ninvoke Book.count(), 'exec'
+                Book.count().exec()
             .then (numBooks) ->
                 assert.equal numBooks, 2,
                     'should have found only the original 2 books'
@@ -121,7 +122,7 @@ describe 'Resource', ->
             call = request(@server)
                 .get("/books/#{@book1._id}")
                 .set('Accept', 'application/json')
-            (Q.ninvoke call, 'end').then (res) =>
+            (Q.nfcall call.end.bind(call)).then (res) =>
                 assert.equal res.statusCode, 200, 'Ok'
                 assert.equal res.body.data.title, @book1.title,
                     'correct title'
@@ -133,7 +134,7 @@ describe 'Resource', ->
             call = request(@server)
                 .get("/books/123456781234567812345678")
                 .set('Accept', 'application/json')
-            (Q.ninvoke call, 'end').then (res) =>
+            (Q.nfcall call.end.bind(call)).then (res) =>
                 assert.equal res.statusCode, 404, 'Ok'
             .then (-> done()), done
 
@@ -143,7 +144,7 @@ describe 'Resource', ->
                 call = request(@server)
                     .get("/books/#{@book1._id}?_fields=title")
                     .set('Accept', 'application/json')
-                (Q.ninvoke call, 'end').then (res) =>
+                (Q.nfcall call.end.bind(call)).then (res) =>
                     assert.equal res.statusCode, 200, 'Ok'
                     assert.deepEqual res.body.meta, {'_fields': 'title'},
                         'should return back the query params'
@@ -164,7 +165,7 @@ describe 'Resource', ->
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json')
                 .send(payload)
-            (Q.ninvoke call, 'end').then (res) =>
+            (Q.nfcall call.end.bind(call)).then (res) =>
                 assert.equal res.statusCode, 200, 'update should work ok'
                 assert.equal res.body.data.title, payload.title,
                     'should return the new book title'
@@ -174,7 +175,7 @@ describe 'Resource', ->
                 # Check in the database.
                 query = Book.findOne()
                     .where("_id").equals(@book1._id)
-                Q.ninvoke query, 'exec'
+                    .exec()
             .then (updatedBook) =>
                 assert.equal updatedBook.title, payload.title,
                     'should have persisted the changes'
@@ -190,13 +191,13 @@ describe 'Resource', ->
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json')
                 .send(payload)
-            (Q.ninvoke call, 'end').then (res) =>
+            (Q.nfcall call.end.bind(call)).then (res) =>
                 assert.equal res.statusCode, 500, 'should return an error'
 
                 # Check in the database.
                 query = Book.findOne()
                     .where("_id").equals(@book1._id)
-                Q.ninvoke query, 'exec'
+                    .exec()
             .then (book) =>
                 assert.equal book.title, @book1.title,
                     'should have remained to the old version of title'
@@ -213,7 +214,7 @@ describe 'Resource', ->
                 .set('Content-Type', 'application/json')
                 .set('Accept', 'application/json')
                 .send(payload)
-            (Q.ninvoke call, 'end').then (res) =>
+            (Q.nfcall call.end.bind(call)).then (res) =>
                 assert.equal res.statusCode, 200, 'should return an error'
                 assert.equal res.body.data.title, payload.title
                 assert.equal res.body.data.author, payload.author
@@ -223,7 +224,7 @@ describe 'Resource', ->
                 # Check in the database.
                 query = Book.findOne()
                     .where("_id").equals(@book1._id)
-                Q.ninvoke query, 'exec'
+                    .exec()
             .then (book) =>
                 assert.equal book.title, payload.title
                 assert.equal book.author, payload.author
@@ -238,7 +239,7 @@ describe 'Resource', ->
             Q().then =>
                 call = request(@server)
                     .del("/books/#{@book1._id}")
-                Q.ninvoke call, 'end'
+                Q.nfcall call.end.bind(call)
             .then (res) =>
                 assert.equal res.statusCode, 204,
                     'delete should have worked'
@@ -248,14 +249,14 @@ describe 'Resource', ->
                 call = request(@server)
                     .get("/books/#{@book1._id}")
                     .set('Accept', 'application/json')
-                Q.ninvoke call, 'end'
+                Q.nfcall call.end.bind(call)
             .then (res) =>
                 assert.equal res.statusCode, 404, 'should not find any book'
 
                 # Check in the database.
                 query = Book.findOne()
                     .where('_id').equals(@book1._id)
-                Q.ninvoke query, 'exec'
+                    .exec()
             .then (book) ->
                 assert.isNull book, 'should not find the book'
             .then (-> done()), done
@@ -266,7 +267,7 @@ describe 'Resource', ->
             call = request(@server)
                 .get("/books")
                 .set('Accept', 'application/json')
-            (Q.ninvoke call, 'end').then (res) =>
+            (Q.nfcall call.end.bind(call)).then (res) =>
                 assert.equal res.statusCode, 200, 'update should work ok'
                 assert.deepEqual res.body.meta, {}, 'no meta data is returned'
                 assert.lengthOf res.body.data, 2, 'should return two objects'
@@ -282,7 +283,7 @@ describe 'Resource', ->
                 call = request(@server)
                     .get('/books?_skip=1&_limit=1')
                     .set('Accept', 'application/json')
-                (Q.ninvoke call, 'end').then (res) =>
+                (Q.nfcall call.end.bind(call)).then (res) =>
                     assert.equal res.statusCode, 200,
                         'should return the correct value'
                     assert.deepEqual res.body.meta, {'_skip': '1', '_limit': '1'},
@@ -304,13 +305,13 @@ describe 'Resource', ->
                     book = new Book
                         title: "book#{index}"
                         author: "author#{index}"
-                    Q.ninvoke book, 'save'
+                    Q.nfcall book.save.bind(book)
 
                 (Q.allSettled insertedBooks).then =>
                     call = request(@server)
                         .get('/books')
                         .set('Accept', 'application/json')
-                    (Q.ninvoke call, 'end').then (res) ->
+                    (Q.nfcall call.end.bind(call)).then (res) ->
                         assert.equal res.statusCode, 200,
                             'should return the correct value'
                         assert.lengthOf res.body.data, 10,
@@ -327,7 +328,7 @@ describe 'Resource', ->
                 call = request(@server)
                     .get('/books?title__eq=book1')
                     .set('Accept', 'application/json')
-                (Q.ninvoke call, 'end').then (res) =>
+                (Q.nfcall call.end.bind(call)).then (res) =>
                     assert.equal res.statusCode, 200,
                         'should return the correct value'
                     assert.deepEqual res.body.meta, {'title__eq': 'book1'},
@@ -342,7 +343,7 @@ describe 'Resource', ->
                 call = request(@server)
                     .get('/books?title=book1')
                     .set('Accept', 'application/json')
-                (Q.ninvoke call, 'end').then (res) =>
+                (Q.nfcall call.end.bind(call)).then (res) =>
                     assert.equal res.statusCode, 200,
                         'should return the correct value'
                     assert.deepEqual res.body.meta, {'title': 'book1'},
@@ -357,7 +358,7 @@ describe 'Resource', ->
                 call = request(@server)
                     .get('/books?title__ne=book1')
                     .set('Accept', 'application/json')
-                (Q.ninvoke call, 'end').then (res) =>
+                (Q.nfcall call.end.bind(call)).then (res) =>
                     assert.equal res.statusCode, 200,
                         'should return the correct value'
                     assert.deepEqual res.body.meta, {'title__ne': 'book1'},
@@ -372,7 +373,7 @@ describe 'Resource', ->
                 call = request(@server)
                     .get('/books?details.numPages__gt=350')
                     .set('Accept', 'application/json')
-                (Q.ninvoke call, 'end').then (res) =>
+                (Q.nfcall call.end.bind(call)).then (res) =>
                     assert.equal res.statusCode, 200,
                         'should return the correct value'
                     assert.deepEqual res.body.meta, {'details.numPages__gt': '350'},
@@ -387,7 +388,7 @@ describe 'Resource', ->
                 call = request(@server)
                     .get('/books?details.numPages__gte=400')
                     .set('Accept', 'application/json')
-                (Q.ninvoke call, 'end').then (res) =>
+                (Q.nfcall call.end.bind(call)).then (res) =>
                     assert.equal res.statusCode, 200,
                         'should return the correct value'
                     assert.deepEqual res.body.meta, {'details.numPages__gte': '400'},
@@ -402,7 +403,7 @@ describe 'Resource', ->
                 call = request(@server)
                     .get('/books?details.numPages__lt=350')
                     .set('Accept', 'application/json')
-                (Q.ninvoke call, 'end').then (res) =>
+                (Q.nfcall call.end.bind(call)).then (res) =>
                     assert.equal res.statusCode, 200,
                         'should return the correct value'
                     assert.deepEqual res.body.meta, {'details.numPages__lt': '350'},
@@ -417,7 +418,7 @@ describe 'Resource', ->
                 call = request(@server)
                     .get('/books?details.numPages__lte=300')
                     .set('Accept', 'application/json')
-                (Q.ninvoke call, 'end').then (res) =>
+                (Q.nfcall call.end.bind(call)).then (res) =>
                     assert.equal res.statusCode, 200,
                         'should return the correct value'
                     assert.deepEqual res.body.meta, {'details.numPages__lte': '300'},
@@ -432,7 +433,7 @@ describe 'Resource', ->
                 call = request(@server)
                     .get("/books?_id__in=#{@book1._id},#{@book2._id}")
                     .set('Accept', 'application/json')
-                (Q.ninvoke call, 'end').then (res) =>
+                (Q.nfcall call.end.bind(call)).then (res) =>
                     assert.equal res.statusCode, 200, 'update should work ok'
                     assert.deepEqual res.body.meta,
                         {_id__in: "#{@book1._id},#{@book2._id}"},
@@ -448,7 +449,7 @@ describe 'Resource', ->
                 call = request(@server)
                     .get('/books?title__regex=k1')
                     .set('Accept', 'application/json')
-                (Q.ninvoke call, 'end').then (res) =>
+                (Q.nfcall call.end.bind(call)).then (res) =>
                     assert.equal res.statusCode, 200,
                         'should return the correct value'
                     assert.deepEqual res.body.meta,
@@ -466,7 +467,7 @@ describe 'Resource', ->
                 call = request(@server)
                     .get('/books?_sort=-title')
                     .set('Accept', 'application/json')
-                (Q.ninvoke call, 'end').then (res) =>
+                (Q.nfcall call.end.bind(call)).then (res) =>
                     assert.equal res.statusCode, 200,
                         'should return the correct value'
                     assert.deepEqual res.body.meta,
@@ -486,7 +487,7 @@ describe 'Resource', ->
                 call = request(@server)
                     .get('/books?_fields=title')
                     .set('Accept', 'application/json')
-                (Q.ninvoke call, 'end').then (res) =>
+                (Q.nfcall call.end.bind(call)).then (res) =>
                     assert.equal res.statusCode, 200,
                         'should return the correct value'
                     assert.lengthOf res.body.data, 2,
@@ -509,11 +510,11 @@ describe 'Resource', ->
                 call = request(@server)
                     .delete("/books?title__regex=1")
                     .set('Accept', 'application/json')
-                (Q.ninvoke call, 'end').then (res) ->
+                (Q.nfcall call.end.bind(call)).then (res) ->
                     assert.equal res.statusCode, 200, 'should have worked ok'
 
                     # Check the database.
-                    Q.ninvoke Book.find(), 'exec'
+                    Book.find().exec()
                 .then (books) =>
                     assert.lengthOf books, 1,
                         'should have removed the matching documents'
@@ -523,7 +524,7 @@ describe 'Resource', ->
 
     describe '.patchDocs()', ->
 
-        describe '.fiter() modifier', ->
+        describe '.filter() modifier', ->
 
             it 'should update all selected books', (done) ->
                 payload =
@@ -533,14 +534,14 @@ describe 'Resource', ->
                     .set('Content-type': 'application/json')
                     .set('Accept', 'application/json')
                     .send(payload)
-                (Q.ninvoke call, 'end').then (res) ->
+                (Q.nfcall call.end.bind(call)).then (res) ->
                     assert.equal res.statusCode, 200, 'should have worked ok'
                     assert.deepEqual res.body.meta,
                         {'author__eq': 'author1'},
                         'added metadata to the response'
 
                     # Check the database.
-                    Q.ninvoke Book.find(), 'exec'
+                    Book.find().exec()
                 .then (books) =>
                     assert.lengthOf books, 2,
                         'should have the same number of books'
@@ -557,7 +558,7 @@ describe 'Resource', ->
             call = request(@server)
                 .get("/books/count")
                 .set('Accept', 'application/json')
-            (Q.ninvoke call, 'end').then (res) ->
+            (Q.nfcall call.end.bind(call)).then (res) ->
                 assert.equal res.statusCode, 200, 'update should work ok'
                 assert.deepEqual res.body.meta, {},
                     'no filters were used'
@@ -571,7 +572,7 @@ describe 'Resource', ->
                 call = request(@server)
                     .get("/books/count?title=book1")
                     .set('Accept', 'application/json')
-                (Q.ninvoke call, 'end').then (res) ->
+                (Q.nfcall call.end.bind(call)).then (res) ->
                     assert.equal res.statusCode, 200, 'update should work ok'
                     assert.deepEqual res.body.meta, {'title': 'book1'},
                         'should return the filters used'
