@@ -1,5 +1,3 @@
-'use strict';
-
 const http = require('http');
 
 const bodyParser = require('body-parser');
@@ -7,7 +5,6 @@ const chai = require('chai');
 const express = require('express');
 const mongoose = require('mongoose');
 const request = require('supertest');
-const Q = require('q');
 
 const fixture = require('./fixture');
 const Resource = require('../lib/Resource');
@@ -56,14 +53,14 @@ describe('Resource', () => {
                 numPages: 400
             }
         });
-        Q.all([
-            Q.ninvoke(this.book1, 'save'),
-            Q.ninvoke(this.book2, 'save')
+        Promise.all([
+            this.book1.save(),
+            this.book2.save(),
         ]).then(() => done(), done);
     });
 
     afterEach((done) => {
-        Q.ninvoke(Book.collection, 'remove').then(() => done(), done);
+        Book.collection.remove().then(() => done(), done);
     });
 
     describe('.createDoc()', () => {
@@ -77,7 +74,7 @@ describe('Resource', () => {
 
             new Promise((resolve, reject) => {
                 request(this.server)
-                    .post("/books")
+                    .post('/books')
                     .set('Content-Type', 'application/json')
                     .set('Accept', 'application/json')
                     .send(payload)
@@ -114,17 +111,17 @@ describe('Resource', () => {
 
             // Call the http endpoint.
             new Promise((resolve, reject) => {
-                const call = request(this.server)
-                    .post("/books")
+                request(this.server)
+                    .post('/books')
                     .set('Content-Type', 'application/json')
                     .set('Accept', 'application/json')
                     .send(payload)
                     .end((err, res) => {
-                      if (err) return reject(err);
-                      return resolve(res);
-                    })
+                        if (err) return reject(err);
+                        return resolve(res);
+                    });
             }).then((res) => {
-                chai.assert.equal(res.statusCode, 500, 'bad input data')
+                chai.assert.equal(res.statusCode, 500, 'bad input data');
                 // Check in the database.
                 return Book.count().exec();
             }).then((numBooks) => {
@@ -156,7 +153,7 @@ describe('Resource', () => {
         it('should return 404 not found when id does not exist', (done) => {
             new Promise((resolve, reject) => {
                 request(this.server)
-                    .get("/books/123456781234567812345678")
+                    .get('/books/123456781234567812345678')
                     .set('Accept', 'application/json')
                     .end((err, res) => {
                         if (err) reject(err);
@@ -214,7 +211,7 @@ describe('Resource', () => {
 
                 // Check in the database.
                 return Book.findOne()
-                    .where("_id").equals(this.book1._id)
+                    .where('_id').equals(this.book1._id)
                     .exec();
             }).then((updatedBook) => {
                 chai.assert.equal(updatedBook.title, payload.title,
@@ -227,24 +224,24 @@ describe('Resource', () => {
         it('should return 500 for a failed update', (done) => {
             const payload = {
                 title: null // `title` is expected to be a string.
-            }
+            };
             new Promise((resolve, reject) => {
-            request(this.server)
-                .patch(`/books/${this.book1._id}`)
-                .set('Content-Type', 'application/json')
-                .set('Accept', 'application/json')
-                .send(payload)
-                .end((err, res) => {
-                    if (err) reject(err);
-                    else resolve(res);
-                });
+                request(this.server)
+                    .patch(`/books/${this.book1._id}`)
+                    .set('Content-Type', 'application/json')
+                    .set('Accept', 'application/json')
+                    .send(payload)
+                    .end((err, res) => {
+                        if (err) reject(err);
+                        else resolve(res);
+                    });
             }).then((res) => {
                 chai.assert.equal(res.statusCode, 500,
                     'should return an error');
 
                 // Check in the database.
                 return Book.findOne()
-                    .where("_id").equals(this.book1._id)
+                    .where('_id').equals(this.book1._id)
                     .exec();
             }).then((book) => {
                 chai.assert.equal(book.title, this.book1.title,
@@ -278,7 +275,7 @@ describe('Resource', () => {
 
                 // Check in the database.
                 return Book.findOne()
-                    .where("_id").equals(this.book1._id)
+                    .where('_id').equals(this.book1._id)
                     .exec();
             }).then((book) => {
                 chai.assert.equal(book.title, payload.title);
@@ -323,7 +320,7 @@ describe('Resource', () => {
                     .exec();
             }).then((book) => {
                 chai.assert.isNull(book, 'should not find the book');
-            }).then(() => done(), done)
+            }).then(() => done(), done);
         });
     });
 
@@ -331,7 +328,7 @@ describe('Resource', () => {
         it('should return all existing book records', (done) => {
             new Promise((resolve, reject) => {
                 request(this.server)
-                    .get("/books")
+                    .get('/books')
                     .set('Accept', 'application/json')
                     .end((err, res) => {
                         if (err) reject(err);
@@ -662,7 +659,7 @@ describe('Resource', () => {
             it('should remove the documents selected by the query', (done) => {
                 new Promise((resolve, reject) => {
                     request(this.server)
-                        .delete("/books?title__regex=1")
+                        .delete('/books?title__regex=1')
                         .set('Accept', 'application/json')
                         .end((err, res) => {
                             if (err) reject(err);
@@ -726,7 +723,7 @@ describe('Resource', () => {
         it('should return a count of all books', (done) => {
             new Promise((resolve, reject) => {
                 request(this.server)
-                    .get("/books/count")
+                    .get('/books/count')
                     .set('Accept', 'application/json')
                     .end((err, res) => {
                         if (err) reject(err);
@@ -746,7 +743,7 @@ describe('Resource', () => {
             it('should return the book count given a filter', (done) => {
                 new Promise((resolve, reject) => {
                     request(this.server)
-                        .get("/books/count?title=book1")
+                        .get('/books/count?title=book1')
                         .set('Accept', 'application/json')
                         .end((err, res) => {
                             if (err) reject(err);

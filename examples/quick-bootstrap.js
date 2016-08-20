@@ -44,31 +44,30 @@
  */
 
 
-var bodyParser = require('body-parser');
-var express = require('express');
-var mongoose = require('mongoose');
-var mortimer = require('../lib/'); // require('mortimer');
+const bodyParser = require('body-parser');
+const express = require('express');
+const mongoose = require('mongoose');
+const mortimer = require('../lib/'); // require('mortimer');
 
 
 // Handle connection to mongodb and data modeling.
 mongoose.connect('mongodb://localhost:27017/examples');
 
-var BookSchema = new mongoose.Schema({
+const BookSchema = new mongoose.Schema({
     'title': {type: String},
     'author': {type: String}
 });
-
-var Book = mongoose.model('Book', BookSchema);
+const Book = mongoose.model('Book', BookSchema);
 
 
 // Setup http server with express.
-var app = express();
+const app = express();
 app.set('query parser', 'simple');
 app.use(bodyParser.json());
 
 
 // Setup mortimer endpoints.
-var resource = new mortimer.Resource(Book);
+const resource = new mortimer.Resource(Book);
 app.post('/books', resource.createDoc());
 app.get('/books', resource.readDocs());
 app.get('/books/count', resource.countDocs());

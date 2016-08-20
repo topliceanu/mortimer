@@ -1,5 +1,3 @@
-'use strict';
-
 const mongoose = require('mongoose');
 
 const Mixed = mongoose.Schema.Types.Mixed;

@@ -107,7 +107,6 @@ See more in the `/examples` directory. All examples have instructions on __how t
  - hit me up for a code review!
 5. Have my kindest thanks for making this project better!
 
-
 ## Licence
 
 (The MIT License)

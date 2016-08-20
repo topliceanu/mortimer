@@ -1,11 +1,10 @@
 {
   "name": "mortimer",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "rest interface for mongoose models, built on top of express",
   "homepage": "http://github.com/topliceanu/mortimer",
   "license": "MIT",
   "keywords": [
-    "coffee",
     "rest",
     "mongoose",
     "mongodb",
@@ -22,25 +21,27 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha",
-    "coverage": "./node_modules/.bin/mocha --require coffee-coverage/register --reporter html-cov | google-chrome",
-    "coveralls": "./node_modules/.bin/mocha --require coffee-coverage/register --reporter mocha-lcov-reporter | ./node_modules/.bin/coveralls",
-    "compile": "./node_modules/.bin/coffee --bare --output ./lib --compile ./src",
-    "lint": "./node_modules/.bin/coffeelint ./src",
-    "doc": "./node_modules/.bin/codo src"
+    "coverage": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha",
+    "coveralls": "./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha --report lcovonly -- -R spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "lint": "./node_modules/.bin/eslint ./lib ./test ./examples",
+    "doc": "./node_modules/.bin/esdoc -c esdoc.json"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "body-parser": "1.15.2",
     "chai": "3.5.0",
+    "coveralls": "2.11.12",
+    "eslint": "3.3.1",
     "express": "4.14.0",
+    "istanbul": "0.4.4",
     "mocha": "3.0.2",
+    "mocha-lcov-reporter": "1.2.0",
     "mongoose": "4.5.9",
     "supertest": "2.0.0"
   },
   "optionalDependencies": {},
   "engines": {
-    "node": ">6.0.0"
+    "node": ">6.3.1"
   },
   "config": {}
 }

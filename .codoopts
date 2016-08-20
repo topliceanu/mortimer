@@ -1,7 +1,0 @@
---output ./doc
---name "mortimer"
---readme ./README.md
---title "mortimer docs"
-./src
--
-CHANGELOG.md

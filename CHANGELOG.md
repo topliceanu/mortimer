@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 2.0.0 - Aug 20, 2016
+* Port the codese to ES2015. Compatiblity with node version <6 was dropped, please use v1.1.0 for this.
+
 ## Version 1.1.0 - Jan 19, 2015
 * Implement `PUT /<resource>/:<resource>Id` to completely replace document.
 * Implement `PATCH /<resource>` to update a set of selected documents.

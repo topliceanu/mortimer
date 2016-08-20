@@ -11,8 +11,8 @@ wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.30.1/install.sh | 
 echo ". ~/.nvm/nvm.sh" >> ~/.bash_profile
 source ~/.bash_profile
 
-# Install node v4.2.4.
-nvm install 4
+# Install latest version of node
+nvm install 6
 
 # Install package dependencies.
 cd /vagrant; nvm use; npm install
