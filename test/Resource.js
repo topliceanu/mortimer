@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const request = require('supertest');
 
 const fixture = require('./fixture');
-const Resource = require('../lib/Resource');
+const mortimer = require('../');
 
 const Book = fixture.Book;
 
@@ -19,7 +19,7 @@ mongoose.Promise = global.Promise;
 
 describe('Resource', () => {
     before(() => {
-        this.rest = new Resource(Book);
+        this.rest = new mortimer.Resource(Book);
 
         this.app = express();
         this.app.set('query parser', 'simple');
