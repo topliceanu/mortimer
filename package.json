@@ -31,6 +31,7 @@
     "body-parser": "1.15.2",
     "chai": "3.5.0",
     "coveralls": "2.11.12",
+    "esdoc": "0.4.8",
     "eslint": "3.3.1",
     "express": "4.14.0",
     "istanbul": "0.4.4",
