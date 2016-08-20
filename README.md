@@ -107,12 +107,11 @@ See more in the `/examples` directory. All examples have instructions on __how t
  - hit me up for a code review!
 5. Have my kindest thanks for making this project better!
 
-
 ## Licence
 
 (The MIT License)
 
-Copyright (c) 2012 Alexandru Topliceanu (alexandru.topliceanu@gmail.com)
+Copyright (c) Alexandru Topliceanu (alexandru.topliceanu@gmail.com)
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the

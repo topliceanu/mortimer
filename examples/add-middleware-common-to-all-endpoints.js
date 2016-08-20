@@ -21,108 +21,96 @@
  * $ Request counters { createDoc: 1, readDocs: 0, readDoc: 0, patchDoc: 0, removeDoc: 0 }
  */
 
-
-var util = require('util');
-
-var bodyParser = require('body-parser');
-var express = require('express');
-var mongoose = require('mongoose');
-var mortimer = require('../lib/'); // require('mortimer');
+const bodyParser = require('body-parser');
+const express = require('express');
+const mongoose = require('mongoose');
+const mortimer = require('../lib/'); // require('mortimer');
 
 
 // Handle connection to mongodb and data modeling.
 mongoose.connect('mongodb://localhost:27017/examples');
 
-var BookSchema = new mongoose.Schema({
+const BookSchema = new mongoose.Schema({
     'title': {type: String},
     'author': {type: String}
 });
 
-var Book = mongoose.model('Book', BookSchema);
+const Book = mongoose.model('Book', BookSchema);
 
 
 // Setup http server with express.
-var app = express();
+const app = express();
 app.set('query parser', 'simple');
 app.use(bodyParser.json());
 
 
 // Extend mortimer.Resource class to add a before hook.
-var ResourceWithHooks = function (Model, options) {
-    mortimer.Resource.call(this, Model, options);
-};
-util.inherits(ResourceWithHooks, mortimer.Resource);
+class ResourceWithHooks extends mortimer.Resource {
+    // By default this method adds no extra middleware, but subclasses can
+    // implement this to add their own custom functionality.
+    before () {
+        return [];
+    }
 
-// By default this method adds no extra middleware, but subclasses can
-// implement this to add their own custom functionality.
-ResourceWithHooks.prototype.before = function (tag) {
-    return []
-};
+    // All endpoints are being overriden to add the before() method.
 
-// All endpoints are being overriden to add the before() method.
-ResourceWithHooks.prototype.createDoc = function(options) {
-    var original = mortimer.Resource.prototype.createDoc.call(this, options);
-    original.unshift(this.before('createDoc'));
-    return original;
-};
+    createDoc () {
+        const original = super.createDoc();
+        original.unshift(this.before('createDoc'));
+        return original;
+    }
 
-ResourceWithHooks.prototype.readDocs = function(options) {
-    var original = mortimer.Resource.prototype.readDocs.call(this, options);
-    original.unshift(this.before('readDocs'));
-    return original;
-};
+    readDocs () {
+        const original = super.readDocs();
+        original.unshift(this.before('readDocs'));
+        return original;
+    }
 
-ResourceWithHooks.prototype.readDoc = function(options) {
-    var original = mortimer.Resource.prototype.readDoc.call(this, options);
-    original.unshift(this.before('readDoc'));
-    return original;
-};
+    readDoc () {
+        const original = super.readDoc();
+        original.unshift(this.before('readDoc'));
+        return original;
+    }
 
-ResourceWithHooks.prototype.patchDoc = function(options) {
-    var original = mortimer.Resource.prototype.patchDoc.call(this, options);
-    original.unshift(this.before('patchDoc'));
-    return original;
-};
+    patchDoc () {
+        const original = super.patchDoc();
+        original.unshift(this.before('patchDoc'));
+        return original;
+    }
 
-ResourceWithHooks.prototype.removeDoc = function(options) {
-    var original = mortimer.Resource.prototype.removeDoc.call(this, options);
-    original.unshift(this.before('removeDoc'));
-    return original;
-};
+    removeDoc () {
+        const original = super.removeDoc();
+        original.unshift(this.before('removeDoc'));
+        return original;
+    }
+}
 
 
 // Extend ResourceWithHooks to add a counter middleware before all endpoints.
-var BookResource = function () {
-    ResourceWithHooks.call(this, Book);
-};
-util.inherits(BookResource, ResourceWithHooks);
-
-// This method implements the counting routine.
-BookResource.prototype.counter = function (tag) {
-    if (!this.counters) {
-        this.counters = {};
+class BookResource extends ResourceWithHooks {
+    constructor () {
+        super(Book);
     }
-    if (!this.counters[tag]) {
-        this.counters[tag] = 0;
-    }
-    var that = this;
-    return function (req, res, next) {
-        that.counters[tag] += 1;
-        console.log('Request counters', that.counters);
-        next()
-    };
-};
 
-// Override ResourceWithHooks#before() add the counter middleware.
-BookResource.prototype.before = function (tag) {
-    return [
-        this.counter(tag)
-    ];
-};
+    // This method implements the counting routine.
+    before (tag) {
+        if (!this.counters) {
+            this.counters = {};
+        }
+        if (!this.counters[tag]) {
+            this.counters[tag] = 0;
+        }
+        var that = this;
+        return function (req, res, next) {
+            that.counters[tag] += 1;
+            next();
+        };
+    }
+}
 
 
 // Setup mortimer endpoints.
-var resource = new BookResource();
+const resource = new BookResource();
 app.post('/books', resource.createDoc());
 app.get('/books', resource.readDocs());
 app.get('/books/:bookId', resource.readDoc());

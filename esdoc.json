@@ -1,0 +1,5 @@
+{
+    "source": "./lib",
+    "destination": "./doc",
+    "lint": true
+}
