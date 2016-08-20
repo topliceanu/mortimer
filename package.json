@@ -22,8 +22,6 @@
   "main": "lib/index.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha",
-    "prepublish": "./node_modules/.bin/coffee --bare --output ./lib --compile ./src",
-    "postpublish": "rm -fr ./lib/*",
     "coverage": "./node_modules/.bin/mocha --require coffee-coverage/register --reporter html-cov | google-chrome",
     "coveralls": "./node_modules/.bin/mocha --require coffee-coverage/register --reporter mocha-lcov-reporter | ./node_modules/.bin/coveralls",
     "compile": "./node_modules/.bin/coffee --bare --output ./lib --compile ./src",
@@ -31,26 +29,18 @@
     "doc": "./node_modules/.bin/codo src"
   },
   "dependencies": {
-    "underscore": "1.8.3"
   },
   "devDependencies": {
-    "body-parser": "1.14.2",
-    "chai": "3.4.1",
-    "codo": "2.0.11",
-    "coffee-coverage": "0.7.0",
-    "coffee-script": "1.10.0",
-    "coffeelint": "1.14.2",
-    "coveralls": "2.11.6",
-    "express": "4.13.3",
-    "mocha": "2.3.4",
-    "mocha-lcov-reporter": "1.0.0",
-    "mongoose": "4.3.4",
-    "q": "1.4.1",
-    "supertest": "1.1.0"
+    "body-parser": "1.15.2",
+    "chai": "3.5.0",
+    "express": "4.14.0",
+    "mocha": "3.0.2",
+    "mongoose": "4.5.9",
+    "supertest": "2.0.0"
   },
   "optionalDependencies": {},
   "engines": {
-    "node": ">0.10.0"
+    "node": ">6.0.0"
   },
   "config": {}
 }

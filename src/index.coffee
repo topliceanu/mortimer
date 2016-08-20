@@ -1,1 +1,0 @@
-exports.Resource = require './Resource'
