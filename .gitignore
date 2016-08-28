@@ -12,7 +12,6 @@ logs
 results
 
 node_modules
-lib
 doc
 .vagrant
 coverage
