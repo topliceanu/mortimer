@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 2.0.1 - Aug 28, 2016
+* Fix critical bug, the implementation code base was not bundled in the npm package because of the way .npmignore works with .gitignore in node v6.
+
 ## Version 2.0.0 - Aug 20, 2016
 * Port the codese to ES2015. Compatiblity with node version <6 was dropped, please use v1.1.0 for this.
 

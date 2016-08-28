@@ -1,6 +1,6 @@
 {
   "name": "mortimer",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "rest interface for mongoose models, built on top of express",
   "homepage": "http://github.com/topliceanu/mortimer",
   "license": "MIT",
