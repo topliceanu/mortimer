@@ -63,6 +63,14 @@ describe('Resource', () => {
         Book.collection.remove().then(() => done(), done);
     });
 
+    describe('.constructor()', () => {
+        it('should throw an error when an invalid model is passed in', () => {
+            chai.assert.throws(() => {
+                new mortimer.Resource(Array);
+            }, Error, 'Resource expected an instance of mongoose.Model')
+        });
+    });
+
     describe('.createDoc()', () => {
         it('should create a new book record', (done) => {
             const payload = {
@@ -593,6 +601,25 @@ describe('Resource', () => {
                         'returns only the first book which has one in title');
                     chai.assert.deepEqual(res.body.data[0], serialize(this.book1),
                         'should return the correct book');
+                }).then(() => done(), done);
+            });
+
+            it('should ignore operators that are not predefined', (done) => {
+                new Promise((resolve, reject) => {
+                    request(this.server)
+                        .get('/books?title__someoperator=k1')
+                        .set('Accept', 'application/json')
+                        .end((err, res) => {
+                            if (err) reject(err);
+                            else resolve(res);
+                        });
+                }).then((res) => {
+                    chai.assert.equal(res.statusCode, 200,
+                        'should return the correct value');
+                    chai.assert.deepEqual(res.body.meta,
+                        {'title__someoperator': 'k1'},
+                        'added metadata to the response');
+                    chai.assert.lengthOf(res.body.data, 2, 'returns all the books')
                 }).then(() => done(), done);
             });
         });
