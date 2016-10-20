@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 2.1.0 - Oct 20, 2016
+* Add optional log function parameter to the constructor. This allows clients to dirrect errors to their own logging infrastructure
+
 ## Version 2.0.1 - Aug 28, 2016
 * Fix critical bug, the implementation code base was not bundled in the npm package because of the way .npmignore works with .gitignore in node v6.
 
