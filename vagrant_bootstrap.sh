@@ -12,7 +12,7 @@ echo ". ~/.nvm/nvm.sh" >> ~/.bash_profile
 source ~/.bash_profile
 
 # Install latest version of node
-nvm install 6
+nvm install 6.9.1
 
 # Install package dependencies.
 cd /vagrant; nvm use; npm install
