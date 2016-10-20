@@ -67,7 +67,7 @@ describe('Resource', () => {
         it('should throw an error when an invalid model is passed in', () => {
             chai.assert.throws(() => {
                 new mortimer.Resource(Array);
-            }, Error, 'Resource expected an instance of mongoose.Model')
+            }, Error, 'Resource expected an instance of mongoose.Model');
         });
     });
 
@@ -619,7 +619,7 @@ describe('Resource', () => {
                     chai.assert.deepEqual(res.body.meta,
                         {'title__someoperator': 'k1'},
                         'added metadata to the response');
-                    chai.assert.lengthOf(res.body.data, 2, 'returns all the books')
+                    chai.assert.lengthOf(res.body.data, 2, 'returns all the books');
                 }).then(() => done(), done);
             });
         });
